@@ -16,15 +16,13 @@ namespace Client_Messanger
     /// </summary>
     public partial class MainWindow : Window
     {
-        public int TestProp { get; set; }
+        
         public MainWindow()
         {
             InitializeComponent();
+            MainFrame.Content = new ChoiceLogRegPage();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("welcome");
-        }
+        
     }
 }

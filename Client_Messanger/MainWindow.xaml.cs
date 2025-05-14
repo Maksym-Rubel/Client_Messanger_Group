@@ -16,6 +16,7 @@ namespace Client_Messanger
     /// </summary>
     public partial class MainWindow : Window
     {
+        public int TestProp { get; set; }
         public MainWindow()
         {
             InitializeComponent();

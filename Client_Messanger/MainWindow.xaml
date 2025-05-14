@@ -7,6 +7,6 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <Button Click="Button_Click" Background="Gray" Foreground="AliceBlue">Welcome to client messanger</Button>
+        <Button Click="Button_Click" Background="BlueViolet" FontSize="30" FontWeight="Bold"  Foreground="AliceBlue">Welcome to client messanger</Button>
     </Grid>
 </Window>

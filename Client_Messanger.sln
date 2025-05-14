@@ -5,6 +5,8 @@ VisualStudioVersion = 17.11.35222.181
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client_Messanger", "Client_Messanger\Client_Messanger.csproj", "{DA3E34D6-EBE2-4489-87DC-63BDB3C55071}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataLayer", "DataLayer\DataLayer.csproj", "{6A872283-546C-471D-ABD1-39A06E117DB4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{DA3E34D6-EBE2-4489-87DC-63BDB3C55071}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DA3E34D6-EBE2-4489-87DC-63BDB3C55071}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DA3E34D6-EBE2-4489-87DC-63BDB3C55071}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A872283-546C-471D-ABD1-39A06E117DB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A872283-546C-471D-ABD1-39A06E117DB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A872283-546C-471D-ABD1-39A06E117DB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A872283-546C-471D-ABD1-39A06E117DB4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

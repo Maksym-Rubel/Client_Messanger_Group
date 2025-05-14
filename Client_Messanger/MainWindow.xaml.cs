@@ -20,5 +20,10 @@ namespace Client_Messanger
         {
             InitializeComponent();
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("welcome");
+        }
     }
 }

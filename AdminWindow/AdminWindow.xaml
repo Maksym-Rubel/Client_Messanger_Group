@@ -1,0 +1,74 @@
+﻿<Window x:Class="YourApp.AdminWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Панель адміністратора"
+        Height="550" Width="750"
+        Background="#F3F8FB"
+        FontFamily="Segoe UI"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="1" CornerRadius="10" Background="White" Padding="5" BorderBrush="#E0E0E0" BorderThickness="1">
+            <ListView x:Name="UsersListView" Background="White" BorderThickness="0" SelectionMode="Single">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Логін" DisplayMemberBinding="{Binding Login}" Width="150"/>
+                        <GridViewColumn Header="Статус" DisplayMemberBinding="{Binding Status}" Width="120"/>
+                        <GridViewColumn Header="Роль" DisplayMemberBinding="{Binding Role}" Width="100"/>
+                        <GridViewColumn Header="Блок до" DisplayMemberBinding="{Binding BlockedUntil}" Width="160"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </Border>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20" >
+            <Button Content="Видалити" Click="Delete_Click" Margin="8" Padding="10,5" 
+        FontWeight="SemiBold" FontSize="14" Foreground="White" Cursor="Hand">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="#E53935" CornerRadius="6" BorderBrush="Transparent" BorderThickness="0">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            <Button Content="Видалити" Click="Delete_Click" Margin="8" Padding="10,5" 
+        FontWeight="SemiBold" FontSize="14" Foreground="White" Cursor="Hand">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="#E53935" CornerRadius="6" BorderBrush="Transparent" BorderThickness="0">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            <Button Content="Заблокувати" Click="Block_Click" Margin="8" Padding="10,5" 
+        FontWeight="SemiBold" FontSize="14" Foreground="White" Cursor="Hand">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="#757575" CornerRadius="6" BorderBrush="Transparent" BorderThickness="0">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+
+            <ComboBox x:Name="DurationComboBox" Width="100" Margin="8" Background="White" Padding="5">
+                <ComboBoxItem Content="1 день" Tag="1"/>
+                <ComboBoxItem Content="3 дні" Tag="3"/>
+                <ComboBoxItem Content="7 днів" Tag="7"/>
+            </ComboBox>
+
+            <TextBox x:Name="ReasonBox" Width="200" Margin="8" Padding="6" Background="White" BorderBrush="#CCC"
+                     VerticalContentAlignment="Center"
+                     Text="Причина блокування"
+                     GotFocus="ReasonBox_GotFocus" Foreground="#888"/>
+        </StackPanel>
+    </Grid>
+</Window>

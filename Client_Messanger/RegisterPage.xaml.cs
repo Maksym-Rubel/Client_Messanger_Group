@@ -12,6 +12,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -19,23 +20,28 @@ using System.Windows.Shapes;
 namespace Client_Messanger
 {
     /// <summary>
-    /// Interaction logic for ChoiceLogRegPage.xaml
+    /// Interaction logic for RegisterPage.xaml
     /// </summary>
-    public partial class ChoiceLogRegPage : Page
+    public partial class RegisterPage : Page
     {
+
         string path = "users.json";
-        List<UsersData> userses; 
-        public ChoiceLogRegPage()
+        List<UsersData> userses;
+        //Зберігаю всі вкладення при вході
+        ChoiceLogRegPage logpage;
+        public RegisterPage(ChoiceLogRegPage log)
         {
             InitializeComponent();
-            // Add image
-            myImage.Source = new BitmapImage(new Uri("pack://application:,,,/images/messenger.png"));
+            myImage.Source = new BitmapImage(new Uri("pack://application:,,,/images/register.png"));
+
+            logpage = log;
             if (!File.Exists(path))
             {
 
                 File.WriteAllText(path, "[]");
             }
             userses = GetLoginData();
+
         }
         public List<UsersData> GetLoginData()
         {
@@ -44,7 +50,25 @@ namespace Client_Messanger
                 return new List<UsersData>();
             return JsonSerializer.Deserialize<List<UsersData>>(text);
         }
-        // Lost and Got Focus for text box
+        private void NameTxt_LostFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox tb = sender as TextBox;
+            if (string.IsNullOrWhiteSpace(tb.Text))
+            {
+                tb.Text = "Enter your nickname";
+                tb.Foreground = Brushes.Gray;
+            }
+        }
+
+        private void NameTxt_GotFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox tb = sender as TextBox;
+            if (tb.Text == "Enter your nickname")
+            {
+                tb.Text = "";
+                tb.Foreground = Brushes.Black;
+            }
+        }
         private void TxtBox_Lost(object sender, RoutedEventArgs e)
         {
             TextBox tb = sender as TextBox;
@@ -84,12 +108,25 @@ namespace Client_Messanger
             }
         }
 
-        private void Regestration(object sender, RoutedEventArgs e)
+       
+
+        private void BackToLogin(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new RegisterPage(this));
+            NavigationService.Navigate(logpage);
         }
 
-        // Хешування пароля
+        private void myImage_Loaded(object sender, RoutedEventArgs e)
+        {
+            myImage.RenderTransform = new TranslateTransform();
+            DoubleAnimation buttonAnimation = new DoubleAnimation();
+            buttonAnimation.From = -myImage.ActualHeight;
+            buttonAnimation.To = 0;
+            buttonAnimation.Duration = TimeSpan.FromSeconds(0.3);
+      
+
+            ((TranslateTransform)myImage.RenderTransform).BeginAnimation(TranslateTransform.YProperty, buttonAnimation);
+        }
+
         public static string GetHash(string password)
         {
             byte[] data = Encoding.Unicode.GetBytes(password);
@@ -102,22 +139,38 @@ namespace Client_Messanger
             }
             return sb.ToString();
         }
-        private void LogInBtn(object sender, RoutedEventArgs e)
+
+        private void RedinBtn(object sender, RoutedEventArgs e)
         {
-            if (PassTxr.Text != "" && EmailTxt.Text != "")
+            bool isUnique = true;
+            if (PassTxr.Text != "" && EmailTxt.Text != "" && NameTxt.Text != "")
             {
-                foreach(var item in userses)
+                foreach (var item in userses)
                 {
-                    if(item.Email == EmailTxt.Text && item.Password == GetHash(PassTxr.Text))
+                    if (item.Email == EmailTxt.Text)
                     {
-                        MessageBox.Show("Confirmed");
+                        MessageBox.Show("Already have account");
+                        isUnique = false;
+                        break;
                     }
-                    else
+
+                    
+                }
+                if(PassTxr.Text.Length >= 8 && isUnique == true)
+                {
+                    var user = new UsersData
                     {
-                        MessageBox.Show("incorect email or pass");
-                    }
+                        Name = NameTxt.Text,
+                        Email = EmailTxt.Text,
+                        Password = GetHash(PassTxr.Text)
+                    };
+                    userses.Add(user);
+                    string json = JsonSerializer.Serialize(userses, new JsonSerializerOptions { WriteIndented = true });
+                    File.WriteAllText(path, json);
                 }
             }
         }
+
+
     }
 }

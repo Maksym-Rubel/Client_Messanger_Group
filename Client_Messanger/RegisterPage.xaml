@@ -1,4 +1,4 @@
-﻿<Page x:Class="Client_Messanger.ChoiceLogRegPage"
+﻿<Page x:Class="Client_Messanger.RegisterPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:Client_Messanger"
       mc:Ignorable="d" 
       d:DesignHeight="720" d:DesignWidth="1280"
-      Title="ChoiceLogRegPage">
+      Title="RegisterPage">
     <Page.Resources>
         <Style x:Key="FocusVisual">
             <Setter Property="Control.Template">
@@ -78,8 +78,10 @@
                                 <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
+                        
                     </ControlTemplate>
                 </Setter.Value>
+                
             </Setter>
         </Style>
         <SolidColorBrush x:Key="TextBox.Static.Border" Color="#FFABAdB3"/>
@@ -197,42 +199,52 @@
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
-            
-        </Grid.RowDefinitions>
-        <Image Grid.Row="1"  Name="myImage" Height="150" Width="150" Margin="0 60 0 0"></Image>
 
-        <Label Margin="0 30 0 0" FontSize="30" Grid.Row="2"  FontWeight="Bold" FontFamily="Helvetica" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center"  Width="400" Padding="0">Login in</Label>
-        <TextBox Style="{DynamicResource TextBoxLoginStyle}"  Name="EmailTxt" LostFocus="TxtBox_Lost_Second" GotFocus="TxtBox_Got_Second" Grid.Row="4" HorizontalAlignment="Center" Padding="10,2,0,0" FontSize="15" VerticalContentAlignment="Center" FontFamily="Helvetica" FontWeight="Medium" Foreground="#8584a1" Height="50" Width="400" Text="Enter your mail address" 
+        </Grid.RowDefinitions>
+        <Image Grid.Row="1"  Name="myImage" Loaded="myImage_Loaded" Height="100" Width="100" Margin="0 60 0 0"></Image>
+
+
+        <TextBox Style="{DynamicResource TextBoxLoginStyle}"  Name="NameTxt" LostFocus="NameTxt_LostFocus" GotFocus="NameTxt_GotFocus" Grid.Row="4" HorizontalAlignment="Center" Padding="10,2,0,0" FontSize="15" VerticalContentAlignment="Center" FontFamily="Helvetica" FontWeight="Medium" Foreground="#8584a1" Height="50" Width="400" Text="Enter your nickname" 
         ></TextBox>
-        <TextBox  Style="{DynamicResource TextBoxLoginStyle}" LostFocus="TxtBox_Lost" GotFocus="TxtBox_Got" Name="PassTxr" Grid.Row="6" FontSize="15" HorizontalAlignment="Center" VerticalContentAlignment="Center" Padding="10,2,0,0" FontFamily="Helvetica" FontWeight="Medium" Foreground="Gray" Height="50" Width="400" Text="Enter password" 
+        <Label Margin="0 30 0 0" FontSize="30" Grid.Row="2"  FontWeight="Bold" FontFamily="Helvetica" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center"  Width="400" Padding="0">Register</Label>
+        <TextBox Style="{DynamicResource TextBoxLoginStyle}"  Name="EmailTxt" LostFocus="TxtBox_Lost_Second" GotFocus="TxtBox_Got_Second" Grid.Row="6" HorizontalAlignment="Center" Padding="10,2,0,0" FontSize="15" VerticalContentAlignment="Center" FontFamily="Helvetica" FontWeight="Medium" Foreground="#8584a1" Height="50" Width="400" Text="Enter your mail address" 
         ></TextBox>
-        <Button Click="LogInBtn" Style="{DynamicResource LoginButtonTemp}" RenderTransformOrigin="0.5,0.5" Margin="0 50 0 0"   Grid.Row="8" HorizontalAlignment="Center"  FontSize="15" FontWeight="UltraBold" Height="50" Background="#0082ff"  BorderBrush="#34aadf" VerticalAlignment="Top" Width="400" Foreground="#daeefc" HorizontalContentAlignment="Center" >
+        <TextBox  Style="{DynamicResource TextBoxLoginStyle}" LostFocus="TxtBox_Lost" GotFocus="TxtBox_Got" Name="PassTxr" Grid.Row="8" FontSize="15" HorizontalAlignment="Center" VerticalContentAlignment="Center" Padding="10,2,0,0" FontFamily="Helvetica" FontWeight="Medium" Foreground="Gray" Height="50" Width="400" Text="Enter password" 
+        ></TextBox>
+        <Button RenderTransformOrigin="0.5,0.5" Style="{DynamicResource LoginButtonTemp}" Click="RedinBtn" Margin="0 30 0 0"   Grid.Row="9" HorizontalAlignment="Center"  FontSize="15" FontWeight="UltraBold" Height="50" Background="#0082ff" Name="MyBtn"  BorderBrush="#0082ff"  VerticalAlignment="Top" Width="400" Foreground="#daeefc" HorizontalContentAlignment="Center" >
             <Button.Effect>
                 <DropShadowEffect Direction="50" BlurRadius="36" ShadowDepth="0" Opacity="0.5"/>
             </Button.Effect>
             <Button.RenderTransform>
                 <ScaleTransform x:Name="scale" ScaleX="1" ScaleY="1"></ScaleTransform>
             </Button.RenderTransform>
-            Log in
-        </Button>
-        <Button Style="{DynamicResource RegisterTemp}" Click="Regestration"   Grid.Row="9" HorizontalAlignment="Center"  FontSize="15" FontWeight="UltraBold" Height="50" Background="Transparent" BorderThickness="0" Margin="0,0,0,0" VerticalAlignment="Top" Width="400" Foreground="#649cc0" HorizontalContentAlignment="Center" >
-             Register Account
-        </Button>
+           
 
+            Register and log in
+        </Button>
+        <Button Style="{DynamicResource RegisterTemp}" Click="BackToLogin"   Grid.Row="10" HorizontalAlignment="Center"  FontSize="15" FontWeight="UltraBold" Height="50" Background="Transparent" BorderThickness="0" Margin="0,0,0,0" VerticalAlignment="Top" Width="400" Foreground="#649cc0" HorizontalContentAlignment="Center" >
+            Back to log in
+        </Button>
 
         <TextBlock  Grid.Row="3" FontSize="17" FontWeight="Medium" FontFamily="Helvetica" Width="400" Margin="0 40 0 0">
+        <Run Text="Name" Foreground="Black"/>
+        <Run Text="*" Foreground="Red"/>
+        </TextBlock>
+        <TextBlock  Grid.Row="5" FontSize="17" FontWeight="Medium" FontFamily="Helvetica" Width="400" Margin="0 20 0 0">
         <Run Text="Email" Foreground="Black"/>
         <Run Text="*" Foreground="Red"/>
         </TextBlock>
 
 
 
-        <TextBlock Grid.Row="5" FontSize="17" FontWeight="Medium" FontFamily="Helvetica" Width="400" Margin="0 20 0 0">
+        <TextBlock Grid.Row="7" FontSize="17" FontWeight="Medium" FontFamily="Helvetica" Width="400" Margin="0 20 0 0">
         <Run Text="Password" Foreground="Black"/>
         <Run Text="*" Foreground="Red"/>
         </TextBlock>
 
     </Grid>
-    
+
 </Page>

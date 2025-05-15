@@ -9,10 +9,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="images\messenger.png" />
+    <None Remove="images\register.png" />
     <None Remove="images\telegram.png" />
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="images\messenger.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="images\register.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="images\telegram.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Db_messenger.Entities;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -23,27 +25,27 @@ namespace Client_Messanger
     /// </summary>
     public partial class ChoiceLogRegPage : Page
     {
-        string path = "users.json";
-        List<UsersData> userses; 
+        
+        List<User> users;
         public ChoiceLogRegPage()
         {
             InitializeComponent();
             // Add image
             myImage.Source = new BitmapImage(new Uri("pack://application:,,,/images/messenger.png"));
-            if (!File.Exists(path))
-            {
+            
+            
+            GetUsersAsycn();
+        }
 
-                File.WriteAllText(path, "[]");
-            }
-            userses = GetLoginData();
-        }
-        public List<UsersData> GetLoginData()
+        public async void GetUsersAsycn()
         {
-            string text = File.ReadAllText(path);
-            if (string.IsNullOrWhiteSpace(text))
-                return new List<UsersData>();
-            return JsonSerializer.Deserialize<List<UsersData>>(text);
+            users = await GetUsers();
         }
+        public async Task<List<User>> GetUsers()
+        {
+            return await AppData.db.Users.ToListAsync();
+        }
+      
         // Lost and Got Focus for text box
         private void TxtBox_Lost(object sender, RoutedEventArgs e)
         {
@@ -106,7 +108,7 @@ namespace Client_Messanger
         {
             if (PassTxr.Text != "" && EmailTxt.Text != "")
             {
-                foreach(var item in userses)
+                foreach(var item in users)
                 {
                     if(item.Email == EmailTxt.Text && item.Password == GetHash(PassTxr.Text))
                     {

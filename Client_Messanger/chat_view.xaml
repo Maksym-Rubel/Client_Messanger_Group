@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Client_Messanger"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="450" d:DesignWidth="1280"
       Background="White"
       Title="chat_view">
 
@@ -23,7 +23,15 @@
                 <TextBlock Text="Чати" FontSize="18" FontWeight="Bold" Margin="10"/>
                 <ListBox Name="ChatListBox" Margin="10" Background="Transparent"
                          BorderThickness="0"
-                         SelectionChanged="ChatListBox_SelectionChanged">
+                         SelectionChanged="ChatListBox_SelectionChanged" Height="80" RenderTransformOrigin="0.5,0.5">
+                    <ListBox.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform ScaleY="1"/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </ListBox.RenderTransform>
                 </ListBox>
             </StackPanel>
         </Border>
@@ -33,14 +41,15 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <!-- Назва чату -->
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="14*"/>
+                <RowDefinition Height="29*"/>
                 <!-- Повідомлення -->
                 <RowDefinition Height="Auto"/>
                 <!-- Ввід -->
             </Grid.RowDefinitions>
 
             <!-- Назва чату -->
-            <Border Grid.Row="0" Background="#ffffff" BorderBrush="#ddd" BorderThickness="0,0,0,1">
+            <Border Grid.Row="0" Background="#ffffff" BorderBrush="#ddd" BorderThickness="0,0,0,1" Margin="0,0,0,112" Grid.RowSpan="2">
                 <TextBlock Name="ChatTitle"
                            Text="Оберіть чат"
                            FontSize="18"
@@ -51,12 +60,12 @@
             </Border>
 
             <!-- Повідомлення -->
-            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Background="#e5e5e5">
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Background="#e5e5e5" Grid.RowSpan="2">
                 <StackPanel Name="MessagesPanel" Margin="10"/>
             </ScrollViewer>
 
             <!-- Поле вводу -->
-            <Border Grid.Row="2" BorderThickness="1,1,0,0" BorderBrush="#ccc" Background="White" Padding="10">
+            <Border Grid.Row="3" BorderThickness="1,1,0,0" BorderBrush="#ccc" Background="White" Padding="10">
                 <DockPanel>
                     <TextBox Name="MessageInput"
                              FontSize="14"

@@ -15,6 +15,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Db_messenger\Db_messenger.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="images\messenger.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>

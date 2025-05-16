@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Db_messenger.Entities;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -25,8 +27,8 @@ namespace Client_Messanger
     public partial class RegisterPage : Page
     {
 
-        string path = "users.json";
-        List<UsersData> userses;
+        
+        List<User> users;
         //Зберігаю всі вкладення при вході
         ChoiceLogRegPage logpage;
         public RegisterPage(ChoiceLogRegPage log)
@@ -35,21 +37,19 @@ namespace Client_Messanger
             myImage.Source = new BitmapImage(new Uri("pack://application:,,,/images/register.png"));
 
             logpage = log;
-            if (!File.Exists(path))
-            {
-
-                File.WriteAllText(path, "[]");
-            }
-            userses = GetLoginData();
-
+            
+            GetUsersAsycn();
         }
-        public List<UsersData> GetLoginData()
+        public async void GetUsersAsycn()
         {
-            string text = File.ReadAllText(path);
-            if (string.IsNullOrWhiteSpace(text))
-                return new List<UsersData>();
-            return JsonSerializer.Deserialize<List<UsersData>>(text);
+            users = await GetUsers();
         }
+        public async Task<List<User>> GetUsers()
+        {
+            return await AppData.db.Users.ToListAsync();
+        }
+        
+        
         private void NameTxt_LostFocus(object sender, RoutedEventArgs e)
         {
             TextBox tb = sender as TextBox;
@@ -140,16 +140,17 @@ namespace Client_Messanger
             return sb.ToString();
         }
 
-        private void RedinBtn(object sender, RoutedEventArgs e)
+        private async void RedinBtn(object sender, RoutedEventArgs e)
         {
+            
             bool isUnique = true;
             if (PassTxr.Text != "" && EmailTxt.Text != "" && NameTxt.Text != "")
             {
-                foreach (var item in userses)
+                foreach (var item in users)
                 {
                     if (item.Email == EmailTxt.Text)
                     {
-                        MessageBox.Show("Already have account");
+                        MessageBox.Show("You already have account");
                         isUnique = false;
                         break;
                     }
@@ -158,15 +159,14 @@ namespace Client_Messanger
                 }
                 if(PassTxr.Text.Length >= 8 && isUnique == true)
                 {
-                    var user = new UsersData
+                    User newUser = new User
                     {
-                        Name = NameTxt.Text,
+                        Nickname = NameTxt.Text,
                         Email = EmailTxt.Text,
                         Password = GetHash(PassTxr.Text)
                     };
-                    userses.Add(user);
-                    string json = JsonSerializer.Serialize(userses, new JsonSerializerOptions { WriteIndented = true });
-                    File.WriteAllText(path, json);
+                    AppData.db.Users.Add(newUser); 
+                    await AppData.db.SaveChangesAsync();
                 }
             }
         }

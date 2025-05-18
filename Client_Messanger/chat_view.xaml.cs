@@ -23,28 +23,25 @@ namespace Client_Messanger
         public chat_view()
         {
             InitializeComponent();
-            LoadChatList();
+            LoadParticipants(new List<string> { "User1" });
+            SetChatTitle("Оберіть чат", "особистий");
         }
 
-        private void LoadChatList()
+        private void CreateChatBtn(object sender, RoutedEventArgs e)
         {
-            // приклад
-            ChatListBox.Items.Add("Чат з Олею");
-            ChatListBox.Items.Add("Група класу");
-            ChatListBox.Items.Add("Бот-помічник");
+            MessageBox.Show("Функція створення чату ще не реалізована");
         }
 
         private void ChatListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (ChatListBox.SelectedItem != null)
             {
-                string selectedChat = ChatListBox.SelectedItem.ToString();
-                ChatTitle.Text = selectedChat;
+                string chatName = ChatListBox.SelectedItem.ToString();
+                bool isGroup = chatName.Contains("[група]");
+                SetChatTitle(chatName, isGroup ? "груповий" : "особистий");
 
-                MessagesPanel.Children.Clear();
-
-                MessagesPanel.Children.Add(CreateMessageBubble("Привіт!", true));
-                MessagesPanel.Children.Add(CreateMessageBubble("Привіт, як справи?", false));
+                List<string> participants = isGroup ? new List<string> { "User1", "User2", "User3" } : new List<string> { "User1" };
+                LoadParticipants(participants);
             }
         }
 
@@ -53,30 +50,66 @@ namespace Client_Messanger
             string message = MessageInput.Text.Trim();
             if (!string.IsNullOrEmpty(message))
             {
-                MessagesPanel.Children.Add(CreateMessageBubble(message, true));
+                AddMessage("Ви", message);
                 MessageInput.Clear();
-
- 
-                MessageInput.Focus();
             }
         }
 
-        private Border CreateMessageBubble(string message, bool isOwn)
+        private void AddMessage(string senderName, string text)
         {
-            var bubble = new Border
+            StackPanel messagePanel = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(0, 5, 0, 5) };
+
+            TextBlock nameText = new TextBlock
             {
-                Background = isOwn ? System.Windows.Media.Brushes.LightBlue : System.Windows.Media.Brushes.LightGray,
-                CornerRadius = new CornerRadius(10),
-                Padding = new Thickness(10),
-                Margin = new Thickness(5),
-                HorizontalAlignment = isOwn ? HorizontalAlignment.Right : HorizontalAlignment.Left,
-                Child = new TextBlock
-                {
-                    Text = message,
-                    TextWrapping = TextWrapping.Wrap
-                }
+                Text = senderName + ": ",
+                FontWeight = FontWeights.Bold,
+                Margin = new Thickness(0, 0, 5, 0)
             };
-            return bubble;
+
+            TextBlock messageText = new TextBlock
+            {
+                Text = text,
+                TextWrapping = TextWrapping.Wrap,
+                MaxWidth = 500
+            };
+
+            messagePanel.Children.Add(nameText);
+            messagePanel.Children.Add(messageText);
+            MessagesPanel.Children.Add(messagePanel);
+        }
+
+        private void LoadParticipants(List<string> users)
+        {
+            ParticipantsListBox.Items.Clear();
+
+            foreach (string user in users)
+            {
+                StackPanel userPanel = new StackPanel { Orientation = Orientation.Horizontal };
+
+                Ellipse status = new Ellipse
+                {
+                    Width = 10,
+                    Height = 10,
+                    Fill = Brushes.Green,
+                    Margin = new Thickness(0, 0, 5, 0)
+                };
+
+                TextBlock userName = new TextBlock
+                {
+                    Text = user
+                };
+
+                userPanel.Children.Add(status);
+                userPanel.Children.Add(userName);
+
+                ParticipantsListBox.Items.Add(userPanel);
+            }
+        }
+
+        private void SetChatTitle(string name, string type)
+        {
+            ChatTitle.Text = name;
+            ChatType.Text = type == "груповий" ? "[Груповий чат]" : "[Особистий чат]";
         }
     }
 }

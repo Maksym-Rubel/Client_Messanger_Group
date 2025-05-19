@@ -27,9 +27,20 @@ namespace Client_Messanger
             SetChatTitle("Оберіть чат", "особистий");
         }
 
+        public chat_view(string chatName, bool isGroup) 
+            : this()
+        {
+            ChatListBox.Items.Add(chatName);
+            ChatListBox.SelectedItem = chatName;
+            SetChatTitle(chatName, isGroup ? "груповий" : "особистий");
+
+            var participants = isGroup ? new List<string> { "User1", "User2", "User3" } : new List<string> { "User1" };
+            LoadParticipants(participants);
+        }
+
         private void CreateChatBtn(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Функція створення чату ще не реалізована");
+            NavigationService?.Navigate(new CreateChatWindow());
         }
 
         private void ChatListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

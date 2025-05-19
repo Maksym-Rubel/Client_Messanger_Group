@@ -1,4 +1,5 @@
-﻿/*using Db_messenger;*/
+using Db_messenger;
+using Db_messenger;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -18,10 +19,20 @@ namespace Client_Messanger
     public partial class MainWindow : Window
     {
 
+
         public MainWindow()
         {
             InitializeComponent();
             /*MainFrame.Content = new ChoiceLogRegPage();*/
+        }
+
+
+
+        
+        public MainWindow()
+        {
+            InitializeComponent();
+            MainFrame.Content = new ChoiceLogRegPage();
         }
 
 

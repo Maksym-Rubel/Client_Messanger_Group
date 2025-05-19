@@ -23,17 +23,13 @@ namespace Client_Messanger
         public MainWindow()
         {
             InitializeComponent();
-            /*MainFrame.Content = new ChoiceLogRegPage();*/
-        }
-
-
-
-        
-        public MainWindow()
-        {
-            InitializeComponent();
             MainFrame.Content = new ChoiceLogRegPage();
         }
+
+
+
+
+
 
 
     }

@@ -157,7 +157,8 @@ namespace Client_Messanger
 
                     
                 }
-                if(PassTxr.Text.Length >= 8 && isUnique == true)
+
+                if (PassTxr.Text.Length >= 8 && PassTxr.Text.Count(char.IsDigit) >= 2 && EmailTxt.Text.Length >= 10 && char.IsUpper(PassTxr.Text[0]) && isUnique == true)
                 {
                     User newUser = new User
                     {

@@ -106,19 +106,24 @@ namespace Client_Messanger
         }
         private void LogInBtn(object sender, RoutedEventArgs e)
         {
+            bool logining = false;
             if (PassTxr.Text != "" && EmailTxt.Text != "")
             {
                 foreach(var item in users)
                 {
                     if(item.Email == EmailTxt.Text && item.Password == GetHash(PassTxr.Text))
                     {
-                        MessageBox.Show("Confirmed");
+                        logining = true;
+                        NavigationService.Navigate(new chat_view());
                     }
-                    else
-                    {
-                        MessageBox.Show("incorect email or pass");
-                    }
+                    
+
                 }
+                if(logining != true)
+                {
+                    MessageBox.Show("Неправильний пароль або пошта");
+                }
+
             }
         }
     }

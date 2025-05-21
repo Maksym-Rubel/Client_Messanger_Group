@@ -158,16 +158,25 @@ namespace Client_Messanger
                     
                 }
 
-                if (PassTxr.Text.Length >= 8 && PassTxr.Text.Count(char.IsDigit) >= 2 && EmailTxt.Text.Length >= 10 && char.IsUpper(PassTxr.Text[0]) && isUnique == true)
+                if (PassTxr.Text.Length >= 8 && PassTxr.Text.Count(char.IsDigit) >= 2 && EmailTxt.Text.Length >= 10 && isUnique == true)
                 {
-                    User newUser = new User
+                    if(!char.IsUpper(PassTxr.Text[0]))
                     {
-                        Nickname = NameTxt.Text,
-                        Email = EmailTxt.Text,
-                        Password = GetHash(PassTxr.Text)
-                    };
-                    AppData.db.Users.Add(newUser); 
-                    await AppData.db.SaveChangesAsync();
+                        MessageBox.Show("Пароль має бути з великої та дві цифри");
+                    }
+                    else
+                    {
+                        User newUser = new User
+                        {
+                            Nickname = NameTxt.Text,
+                            Email = EmailTxt.Text,
+                            Password = GetHash(PassTxr.Text)
+                        };
+                        AppData.db.Users.Add(newUser);
+                        await AppData.db.SaveChangesAsync();
+                        NavigationService.Navigate(new chat_view());
+                    }
+                        
                 }
             }
         }

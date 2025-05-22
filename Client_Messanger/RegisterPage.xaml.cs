@@ -142,35 +142,43 @@ namespace Client_Messanger
 
         private async void RedinBtn(object sender, RoutedEventArgs e)
         {
-            
-            bool isUnique = true;
-            if (PassTxr.Text != "" && EmailTxt.Text != "" && NameTxt.Text != "")
+            try
             {
-                foreach (var item in users)
+                bool isUnique = true;
+                if (PassTxr.Text != "" && EmailTxt.Text != "" && NameTxt.Text != "")
                 {
-                    if (item.Email == EmailTxt.Text)
+                    foreach (var item in users)
                     {
-                        MessageBox.Show("You already have account");
-                        isUnique = false;
-                        break;
+                        if (item.Email == EmailTxt.Text)
+                        {
+                            MessageBox.Show("You already have account");
+                            isUnique = false;
+                            break;
+                        }
+
+
                     }
 
-                    
-                }
-
-                if (PassTxr.Text.Length >= 8 && PassTxr.Text.Count(char.IsDigit) >= 2 && EmailTxt.Text.Length >= 10 && char.IsUpper(PassTxr.Text[0]) && isUnique == true)
-                {
-                    User newUser = new User
+                    if (PassTxr.Text.Length >= 8 && PassTxr.Text.Count(char.IsDigit) >= 2 && EmailTxt.Text.Length >= 10 && char.IsUpper(PassTxr.Text[0]) && isUnique == true)
                     {
-                        Nickname = NameTxt.Text,
-                        Email = EmailTxt.Text,
-                        Password = GetHash(PassTxr.Text)
-                    };
-                    AppData.db.Users.Add(newUser); 
-                    await AppData.db.SaveChangesAsync();
-                    NavigationService.Navigate(new chat_view());
+                        User newUser = new User
+                        {
+                            Nickname = NameTxt.Text,
+                            Email = EmailTxt.Text,
+                            Password = GetHash(PassTxr.Text)
+                        };
+                        AppData.db.Users.Add(newUser);
+                        await AppData.db.SaveChangesAsync();
+                        NavigationService.Navigate(new chat_view());
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            
+           
         }
 
 

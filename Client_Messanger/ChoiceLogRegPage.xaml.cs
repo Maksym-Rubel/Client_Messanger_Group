@@ -127,25 +127,31 @@ namespace Client_Messanger
         }
         private void LogInBtn(object sender, RoutedEventArgs e)
         {
-            bool logining = false;
-            if (PassTxr.Text != "" && EmailTxt.Text != "")
+            try
             {
-                foreach(var item in users)
+                bool logining = false;
+                if (PassTxr.Text != "" && EmailTxt.Text != "")
                 {
-                    if(item.Email == EmailTxt.Text && item.Password == GetHash(PassTxr.Text))
+                    foreach (var item in users)
                     {
-                        logining = true;
-                        NavigationService.Navigate(new chat_view());
+                        if (item.Email == EmailTxt.Text && item.Password == GetHash(PassTxr.Text))
+                        {
+                            logining = true;
+                            NavigationService.Navigate(new chat_view());
+                        }
+
+
                     }
-                    
+                    if (logining != true)
+                    {
+                        MessageBox.Show("Неправильний пароль або пошта");
+                    }
 
                 }
-                if(logining != true)
-                {
-                    MessageBox.Show("Неправильний пароль або пошта");
-                }
-
             }
+            catch (Exception ex) 
+            { Console.WriteLine(ex.Message); }
+            
         }
     }
 }

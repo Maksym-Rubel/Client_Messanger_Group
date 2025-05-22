@@ -14,8 +14,7 @@ namespace Db_messenger
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            try
-            {
+           
                 base.OnConfiguring(optionsBuilder);
                 optionsBuilder.UseSqlServer(@"Data Source=DESKTOP-JELVTGO\SQLEXPRESS;
                                                 Initial Catalog=Group_Messenger_DB;
@@ -26,11 +25,8 @@ namespace Db_messenger
                                                 Application Intent=ReadWrite;
                                                 Multi Subnet Failover=False;",
                                                 sqlOptions => sqlOptions.EnableRetryOnFailure());
-            }
-            catch (Exception ex)
-            {
-                //File.WriteAllText("log.txt", ex.ToString());
-            }
+           
+           
         }
 
 

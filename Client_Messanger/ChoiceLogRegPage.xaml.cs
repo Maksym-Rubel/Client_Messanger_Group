@@ -33,19 +33,40 @@ namespace Client_Messanger
             // Add image
             myImage.Source = new BitmapImage(new Uri("pack://application:,,,/images/messenger.png"));
             
+            try
+            {
+                GetUsersAsycn();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
             
-            GetUsersAsycn();
         }
 
         public async void GetUsersAsycn()
         {
-            users = await GetUsers();
+            
+            try
+            {
+                users = await GetUsers();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
         public async Task<List<User>> GetUsers()
         {
+
+
             return await AppData.db.Users.ToListAsync();
+
+
+
+
         }
-      
+
         // Lost and Got Focus for text box
         private void TxtBox_Lost(object sender, RoutedEventArgs e)
         {

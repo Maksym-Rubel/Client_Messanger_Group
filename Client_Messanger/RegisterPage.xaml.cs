@@ -168,6 +168,7 @@ namespace Client_Messanger
                     };
                     AppData.db.Users.Add(newUser); 
                     await AppData.db.SaveChangesAsync();
+                    NavigationService.Navigate(new chat_view());
                 }
             }
         }

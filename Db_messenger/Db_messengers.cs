@@ -25,8 +25,10 @@ namespace Db_messenger
                                                 Application Intent=ReadWrite;
                                                 Multi Subnet Failover=False;",
                                                 sqlOptions => sqlOptions.EnableRetryOnFailure());
+          
            
-           
+         
+            
         }
 
 

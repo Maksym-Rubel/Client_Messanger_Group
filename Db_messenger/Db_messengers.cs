@@ -21,7 +21,7 @@ namespace Db_messenger
                                                 Initial Catalog=Group_Messenger_DB;
                                                 User ID=group_user;
                                                 Password=NewStrongPasswordHere;
-                                                Encrypt=False;
+                                                Encrypt=True;
                                                 TrustServerCertificate=True;
                                                 Application Intent=ReadWrite;
                                                 Multi Subnet Failover=False;",

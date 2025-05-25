@@ -202,10 +202,10 @@
         </Grid.RowDefinitions>
         <Image Grid.Row="1"  Name="myImage" Height="150" Width="150" Margin="0 60 0 0"></Image>
 
-        <Label Margin="0 30 0 0" FontSize="30" Grid.Row="2"  FontWeight="Bold" FontFamily="Helvetica" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center"  Width="400" Padding="0">Login in</Label>
-        <TextBox Style="{DynamicResource TextBoxLoginStyle}"  Name="EmailTxt" LostFocus="TxtBox_Lost_Second" GotFocus="TxtBox_Got_Second" Grid.Row="4" HorizontalAlignment="Center" Padding="10,2,0,0" FontSize="15" VerticalContentAlignment="Center" FontFamily="Helvetica" FontWeight="Medium" Foreground="#8584a1" Height="50" Width="400" Text="Enter your mail address" 
+        <Label Margin="0 30 0 0" FontSize="30" Grid.Row="2"  FontWeight="Bold" FontFamily="Helvetica" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center"  Width="400" Padding="0">Увійти</Label>
+        <TextBox Style="{DynamicResource TextBoxLoginStyle}"  Name="EmailTxt" LostFocus="TxtBox_Lost_Second" GotFocus="TxtBox_Got_Second" Grid.Row="4" HorizontalAlignment="Center" Padding="10,2,0,0" FontSize="15" VerticalContentAlignment="Center" FontFamily="Helvetica" FontWeight="Medium" Foreground="#8584a1" Height="50" Width="400" Text="Введи свою електронну адресу" 
         ></TextBox>
-        <TextBox  Style="{DynamicResource TextBoxLoginStyle}" LostFocus="TxtBox_Lost" GotFocus="TxtBox_Got" Name="PassTxr" Grid.Row="6" FontSize="15" HorizontalAlignment="Center" VerticalContentAlignment="Center" Padding="10,2,0,0" FontFamily="Helvetica" FontWeight="Medium" Foreground="Gray" Height="50" Width="400" Text="Enter password" 
+        <TextBox  Style="{DynamicResource TextBoxLoginStyle}" LostFocus="TxtBox_Lost" GotFocus="TxtBox_Got" Name="PassTxr" Grid.Row="6" FontSize="15" HorizontalAlignment="Center" VerticalContentAlignment="Center" Padding="10,2,0,0" FontFamily="Helvetica" FontWeight="Medium" Foreground="Gray" Height="50" Width="400" Text="Введи пароль" 
         ></TextBox>
         <Button Click="LogInBtn" Style="{DynamicResource LoginButtonTemp}" RenderTransformOrigin="0.5,0.5" Margin="0 50 0 0"   Grid.Row="8" HorizontalAlignment="Center"  FontSize="15" FontWeight="UltraBold" Height="50" Background="#0082ff"  BorderBrush="#34aadf" VerticalAlignment="Top" Width="400" Foreground="#daeefc" HorizontalContentAlignment="Center" >
             <Button.Effect>
@@ -214,10 +214,10 @@
             <Button.RenderTransform>
                 <ScaleTransform x:Name="scale" ScaleX="1" ScaleY="1"></ScaleTransform>
             </Button.RenderTransform>
-            Log in
+            Увійти
         </Button>
         <Button Style="{DynamicResource RegisterTemp}" Click="Regestration"   Grid.Row="9" HorizontalAlignment="Center"  FontSize="15" FontWeight="UltraBold" Height="50" Background="Transparent" BorderThickness="0" Margin="0,0,0,0" VerticalAlignment="Top" Width="400" Foreground="#649cc0" HorizontalContentAlignment="Center" >
-             Register Account
+            Ще не маєш акаунта? Зареєструйся!
         </Button>
 
 

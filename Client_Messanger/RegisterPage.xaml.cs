@@ -1,23 +1,13 @@
 ﻿using Db_messenger.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Client_Messanger
 {
@@ -27,7 +17,7 @@ namespace Client_Messanger
     public partial class RegisterPage : Page
     {
 
-        
+
         List<User> users;
         //Зберігаю всі вкладення при вході
         ChoiceLogRegPage logpage;
@@ -37,7 +27,7 @@ namespace Client_Messanger
             myImage.Source = new BitmapImage(new Uri("pack://application:,,,/images/register.png"));
 
             logpage = log;
-            
+
             GetUsersAsycn();
         }
         public async void GetUsersAsycn()
@@ -48,14 +38,14 @@ namespace Client_Messanger
         {
             return await AppData.db.Users.ToListAsync();
         }
-        
-        
+
+
         private void NameTxt_LostFocus(object sender, RoutedEventArgs e)
         {
             TextBox tb = sender as TextBox;
             if (string.IsNullOrWhiteSpace(tb.Text))
             {
-                tb.Text = "Enter your nickname";
+                tb.Text = "Введи своє ім'я";
                 tb.Foreground = Brushes.Gray;
             }
         }
@@ -63,7 +53,7 @@ namespace Client_Messanger
         private void NameTxt_GotFocus(object sender, RoutedEventArgs e)
         {
             TextBox tb = sender as TextBox;
-            if (tb.Text == "Enter your nickname")
+            if (tb.Text == "Введи своє ім'я")
             {
                 tb.Text = "";
                 tb.Foreground = Brushes.Black;
@@ -74,7 +64,7 @@ namespace Client_Messanger
             TextBox tb = sender as TextBox;
             if (string.IsNullOrWhiteSpace(tb.Text))
             {
-                tb.Text = "Enter password";
+                tb.Text = "Введи пароль";
                 tb.Foreground = Brushes.Gray;
             }
         }
@@ -82,7 +72,7 @@ namespace Client_Messanger
         private void TxtBox_Got(object sender, RoutedEventArgs e)
         {
             TextBox tb = sender as TextBox;
-            if (tb.Text == "Enter password")
+            if (tb.Text == "Введи пароль")
             {
                 tb.Text = "";
                 tb.Foreground = Brushes.Black;
@@ -93,7 +83,7 @@ namespace Client_Messanger
             TextBox tb = sender as TextBox;
             if (string.IsNullOrWhiteSpace(tb.Text))
             {
-                tb.Text = "Enter your mail address";
+                tb.Text = "Введи свою електронну адресу";
                 tb.Foreground = Brushes.Gray;
             }
         }
@@ -101,14 +91,14 @@ namespace Client_Messanger
         private void TxtBox_Got_Second(object sender, RoutedEventArgs e)
         {
             TextBox tb = sender as TextBox;
-            if (tb.Text == "Enter your mail address")
+            if (tb.Text == "Введи свою електронну адресу")
             {
                 tb.Text = "";
                 tb.Foreground = Brushes.Black;
             }
         }
 
-       
+
 
         private void BackToLogin(object sender, RoutedEventArgs e)
         {
@@ -122,7 +112,7 @@ namespace Client_Messanger
             buttonAnimation.From = -myImage.ActualHeight;
             buttonAnimation.To = 0;
             buttonAnimation.Duration = TimeSpan.FromSeconds(0.3);
-      
+
 
             ((TranslateTransform)myImage.RenderTransform).BeginAnimation(TranslateTransform.YProperty, buttonAnimation);
         }
@@ -142,7 +132,7 @@ namespace Client_Messanger
 
         private async void RedinBtn(object sender, RoutedEventArgs e)
         {
-            
+
             bool isUnique = true;
             if (PassTxr.Text != "" && EmailTxt.Text != "" && NameTxt.Text != "")
             {
@@ -155,7 +145,7 @@ namespace Client_Messanger
                         break;
                     }
 
-                    
+
                 }
 
                 if (PassTxr.Text.Length >= 8 && PassTxr.Text.Count(char.IsDigit) >= 2 && EmailTxt.Text.Length >= 10 && char.IsUpper(PassTxr.Text[0]) && isUnique == true)
@@ -166,9 +156,9 @@ namespace Client_Messanger
                         Email = EmailTxt.Text,
                         Password = GetHash(PassTxr.Text)
                     };
-                    AppData.db.Users.Add(newUser); 
+                    AppData.db.Users.Add(newUser);
                     await AppData.db.SaveChangesAsync();
-                    NavigationService.Navigate(new chat_view(NameTxt.Text,EmailTxt.Text));
+                    NavigationService.Navigate(new chat_view(NameTxt.Text, EmailTxt.Text));
                 }
             }
         }

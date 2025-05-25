@@ -169,8 +169,7 @@ namespace Client_Messanger
                 {
                     ListBoxMessage.ScrollIntoView(ListBoxMessage.Items[ListBoxMessage.Items.Count - 1]);
                 }
-                MessageInput.Text = "Написати повідомлення...";
-                MessageInput.Foreground = Brushes.Gray;
+
             }
         }
 

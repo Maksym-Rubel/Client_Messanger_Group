@@ -63,7 +63,7 @@ namespace Client_Messanger
             TextBox tb = sender as TextBox;
             if (string.IsNullOrWhiteSpace(tb.Text))
             {
-                tb.Text = "Enter password";
+                tb.Text = "Введи пароль";
                 tb.Foreground = Brushes.Gray;
             }
         }
@@ -71,7 +71,7 @@ namespace Client_Messanger
         private void TxtBox_Got(object sender, RoutedEventArgs e)
         {
             TextBox tb = sender as TextBox;
-            if (tb.Text == "Enter password")
+            if (tb.Text == "Введи пароль")
             {
                 tb.Text = "";
                 tb.Foreground = Brushes.Black;
@@ -82,7 +82,7 @@ namespace Client_Messanger
             TextBox tb = sender as TextBox;
             if (string.IsNullOrWhiteSpace(tb.Text))
             {
-                tb.Text = "Enter your mail address";
+                tb.Text = "Введи свою електронну адресу";
                 tb.Foreground = Brushes.Gray;
             }
         }
@@ -90,7 +90,7 @@ namespace Client_Messanger
         private void TxtBox_Got_Second(object sender, RoutedEventArgs e)
         {
             TextBox tb = sender as TextBox;
-            if (tb.Text == "Enter your mail address")
+            if (tb.Text == "Введи свою електронну адресу")
             {
                 tb.Text = "";
                 tb.Foreground = Brushes.Black;

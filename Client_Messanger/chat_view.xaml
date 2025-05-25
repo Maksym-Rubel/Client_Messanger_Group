@@ -5,9 +5,176 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:Client_Messanger"
       mc:Ignorable="d"
-      d:DesignHeight="450" d:DesignWidth="1280"
+      d:DesignHeight="720" d:DesignWidth="1280"
       Background="White"
       Title="chat_view">
+    <Page.Resources>
+        
+        <Style x:Key="FocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="2" StrokeDashArray="1 2" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" SnapsToDevicePixels="true" StrokeThickness="1"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <SolidColorBrush x:Key="Button.Static.Background" Color="#FFDDDDDD"/>
+        <SolidColorBrush x:Key="Button.Static.Border" Color="#0082ff"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#0082ff"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#0889bf"/>
+        <SolidColorBrush x:Key="Button.Pressed.Background" Color="#2372c2"/>
+        <SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628B"/>
+        <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
+        <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
+        <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
+        <Style x:Key="ButtonStyle1" TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+            <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border" CornerRadius="8" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsDefaulted" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <SolidColorBrush x:Key="Button.Static.Background1" Color="#FFDDDDDD"/>
+        <SolidColorBrush x:Key="Button.Static.Border1" Color="#0082ff"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Background1" Color="#0082ff"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Border1" Color="#0889bf"/>
+        <SolidColorBrush x:Key="Button.Pressed.Background1" Color="#2372c2"/>
+        <SolidColorBrush x:Key="Button.Pressed.Border1" Color="#FF2C628B"/>
+        <SolidColorBrush x:Key="Button.Disabled.Background1" Color="#FFF4F4F4"/>
+        <SolidColorBrush x:Key="Button.Disabled.Border1" Color="#FFADB2B5"/>
+        <SolidColorBrush x:Key="Button.Disabled.Foreground1" Color="#FF838383"/>
+        <Style x:Key="LoginButtonTemp" TargetType="{x:Type Button}">
+
+            <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border" CornerRadius="13" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsDefaulted" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
+                                <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleX)" To="1.1" Duration="0:0:0:0.2"></DoubleAnimation>
+                                            <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleY)" To="1.1" Duration="0:0:0:0.2"></DoubleAnimation>
+
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleX)" To="1.0" Duration="0:0:0:0.2"></DoubleAnimation>
+                                            <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleY)" To="1.0" Duration="0:0:0:0.2"></DoubleAnimation>
+
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+
+                    </ControlTemplate>
+                </Setter.Value>
+
+            </Setter>
+        </Style>
+        <SolidColorBrush x:Key="ListBox.Static.Background" Color="#FFFFFFFF"/>
+        <SolidColorBrush x:Key="ListBox.Static.Border" Color="#FFABADB3"/>
+        <SolidColorBrush x:Key="ListBox.Disabled.Background" Color="#FFFFFFFF"/>
+        <SolidColorBrush x:Key="ListBox.Disabled.Border" Color="#FFD9D9D9"/>
+        <Style x:Key="ListBoxStyle1" TargetType="{x:Type ListBox}">
+            <Setter Property="Background" Value="{StaticResource ListBox.Static.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource ListBox.Static.Border}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
+            <Setter Property="ScrollViewer.PanningMode" Value="Both"/>
+            <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ListBox}">
+                        <Border x:Name="Bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="1" SnapsToDevicePixels="true">
+                            <ScrollViewer Focusable="false" Padding="{TemplateBinding Padding}">
+                                <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                            </ScrollViewer>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            
+                            
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="Bd" Value="{StaticResource ListBox.Disabled.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource ListBox.Disabled.Border}"/>
+                            </Trigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsGrouping" Value="true"/>
+                                    <Condition Property="VirtualizingPanel.IsVirtualizingWhenGrouping" Value="false"/>
+                                </MultiTrigger.Conditions>
+                                <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
+                            </MultiTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -21,14 +188,20 @@
 
         <!-- Список чатів -->
         <Border Background="#ffffff" BorderBrush="#ddd" BorderThickness="0,0,1,0">
-            <StackPanel>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+
+                </Grid.RowDefinitions>
                 <TextBlock Text="Чати" FontSize="18" FontWeight="Bold" Margin="10"/>
-                <Button Content="➕ Створити чат" Margin="10" Click="CreateChatBtn"/>
-                <ListBox Name="ChatListBox" Margin="10" Background="Transparent"
+                <Button  Style="{DynamicResource LoginButtonTemp}" RenderTransformOrigin="0.5,0.5" FontSize="15" FontWeight="UltraBold" Height="50" Background="#0082ff" Foreground="#daeefc" Grid.Row="1" Content="➕ Створити чат" Margin="10" Click="CreateChatBtn"/>
+                <ListBox Grid.Row="2" Name="ChatListBox" Margin="10" Background="Transparent"
                          BorderThickness="0"
                          SelectionChanged="ChatListBox_SelectionChanged"
-                         Height="300"/>
-            </StackPanel>
+                         />
+            </Grid>
         </Border>
 
         <!-- Основна частина чату -->
@@ -58,47 +231,108 @@
                 </Grid>
             </Border>
 
-            <!-- Повідомлення -->
+            <!-- Повідомлення
             <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Background="#e5e5e5">
-                <StackPanel Name="MessagesPanel" Margin="10">
-                    <!-- Повідомлення буде додано динамічно -->
+                <StackPanel Name="MessagesPanel" Margin="10"> -->
+                    <!-- Повідомлення буде додано динамічно 
                 </StackPanel>
-            </ScrollViewer>
+            </ScrollViewer>-->
+            <ListBox Style="{DynamicResource ListBoxStyle1}"  SelectionMode="Single"   ItemsSource="{Binding Files}" Name="ListBoxMessage" Grid.Row="1" Background="White"
+                      SelectionChanged="MyListBox_SelectionChanged"
+                      PreviewMouseDown="MyListBox_PreviewMouseDown"
+                      ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                      Focusable="False">
+                
+
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            
+                                <Border Background="#ecf5ff"
+                                    CornerRadius="10"
+                                    Padding="10"
+                                    Margin="5"
+                                    MaxWidth="400">
+                                    <StackPanel>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"></ColumnDefinition>
+                                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="auto"></RowDefinition>
+                                            <RowDefinition Height="*"></RowDefinition>
+
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Grid.ColumnSpan="2" FontWeight="Bold" Grid.Row="0" Text="{Binding Sender}"
+                                            Foreground="#393d40"
+                                            TextWrapping="Wrap" />
+                                        <TextBlock Grid.Row="1" Grid.Column="0"  Text="{Binding Message}"
+                                        Foreground="#393d40"
+                                        TextWrapping="Wrap" />
+                                        <TextBlock  Grid.Row="1" Grid.Column="1" Margin="5 5 0 0" Text="{Binding Time}"
+                                        HorizontalAlignment="Right"
+                                        Foreground="#393d40"
+                                        FontSize="10"
+                                        />
+                                    </Grid>
+                                </StackPanel>
+                                </Border>
+                            
+                           
+                        </StackPanel>
+                    </DataTemplate>
+                            
+                </ListBox.ItemTemplate>
+            </ListBox>
 
             <!-- Поле вводу -->
-            <Border Grid.Row="2" BorderThickness="1,1,0,0" BorderBrush="#ccc" Background="White" Padding="10">
-                <DockPanel>
+            <Border Grid.Row="2" BorderThickness="1,1,0,0" BorderBrush="#ccc" Background="White" Padding="5">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="auto"></ColumnDefinition>
+
+                    </Grid.ColumnDefinitions>
                     <TextBox Name="MessageInput"
+                             KeyDown="MessageInput_KeyDown"
                              FontSize="14"
                              Padding="10"
-                             Margin="0,0,10,0"
+                             Margin="0,0,5,0"
                              VerticalAlignment="Center"
                              BorderBrush="#cccccc"
                              BorderThickness="1"
                              Background="White"
                              MinHeight="40"
                              MaxHeight="120"
-                             VerticalScrollBarVisibility="Auto"
-                             AcceptsReturn="True"
+                             Grid.Column="0"
+                             VerticalScrollBarVisibility="Hidden"
+                             AcceptsReturn="False"
                              TextWrapping="Wrap"
                              VerticalContentAlignment="Top"
                              HorizontalAlignment="Stretch"
                              DockPanel.Dock="Left"
-                             MinWidth="480"/>
-                    <Button Name="SendButton"
+                             />
+                    <Button Style="{DynamicResource ButtonStyle1}"  Name="SendButton"
                             Content="➤"
                             Width="40"
                             Height="40"
-                            Background="#0078D7"
+                            Background="#0082ff"
                             Foreground="White"
-                            FontSize="16"
+                            FontSize="18"
+                            VerticalContentAlignment="Center"
+                            HorizontalContentAlignment="Center"
+                            Padding="0"
+                            Grid.Column="1"
                             FontWeight="Bold"
                             BorderThickness="0"
                             Cursor="Hand"
                             VerticalAlignment="Center"
                             DockPanel.Dock="Right"
-                            Click="SendBtn"/>
-                </DockPanel>
+                            Click="SendBtn">
+                      
+                    </Button>
+                </Grid>
             </Border>
         </Grid>
 

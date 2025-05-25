@@ -32,7 +32,7 @@ namespace Client_Messanger
             InitializeComponent();
             // Add image
             myImage.Source = new BitmapImage(new Uri("pack://application:,,,/images/messenger.png"));
-            
+
             try
             {
                 GetUsersAsycn();
@@ -135,7 +135,7 @@ namespace Client_Messanger
                     if(item.Email == EmailTxt.Text && item.Password == GetHash(PassTxr.Text))
                     {
                         logining = true;
-                        NavigationService.Navigate(new chat_view());
+                        NavigationService.Navigate(new chat_view(item.Nickname,item.Email));
                     }
                     
 

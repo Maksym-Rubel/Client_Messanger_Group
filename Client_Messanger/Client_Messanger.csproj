@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="images\messenger icon.png" />
     <None Remove="images\messenger.png" />
     <None Remove="images\register.png" />
     <None Remove="images\telegram.png" />

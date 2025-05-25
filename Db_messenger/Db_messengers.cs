@@ -1,6 +1,7 @@
 ﻿using Db_messenger.Entities;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace Db_messenger
 {
     public class Db_messengers : DbContext
@@ -51,7 +52,7 @@ namespace Db_messenger
 
         public DbSet<Messages> Messages { get; set; }
         public DbSet<User> Users { get; set; }
-
+        
         public DbSet<Chat> Chats { get; set; }
 
 

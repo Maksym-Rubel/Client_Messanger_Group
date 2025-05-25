@@ -15,9 +15,9 @@ namespace Db_messenger
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-           
-                base.OnConfiguring(optionsBuilder);
-                optionsBuilder.UseSqlServer(@"Data Source=192.168.1.121,1433;
+
+            base.OnConfiguring(optionsBuilder);
+            optionsBuilder.UseSqlServer(@"Data Source=192.168.1.121\SQLEXPRESS,1433;
                                                 Initial Catalog=Group_Messenger_DB;
                                                 User ID=group_user;
                                                 Password=NewStrongPasswordHere;
@@ -26,11 +26,11 @@ namespace Db_messenger
                                                 Application Intent=ReadWrite;
                                                 Multi Subnet Failover=False;",
 
-                                                sqlOptions => sqlOptions.EnableRetryOnFailure());
-          
-           
-         
-            
+                                            sqlOptions => sqlOptions.EnableRetryOnFailure());
+
+
+
+
         }
 
 
@@ -53,7 +53,7 @@ namespace Db_messenger
 
         public DbSet<Messages> Messages { get; set; }
         public DbSet<User> Users { get; set; }
-        
+
         public DbSet<Chat> Chats { get; set; }
 
 

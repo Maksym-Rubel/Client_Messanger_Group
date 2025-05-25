@@ -17,6 +17,7 @@ namespace AdminWindow
 /// <summary>
 /// Interaction logic for AdminWindow.xaml
 /// </summary>
+
 {
     public partial class AdminWindow : Window
     {

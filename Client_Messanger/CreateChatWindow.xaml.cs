@@ -1,19 +1,8 @@
 ﻿using Db_messenger.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Client_Messanger
 {
@@ -57,8 +46,8 @@ namespace Client_Messanger
         }
         private async void CreateChatBtn(object sender, RoutedEventArgs e)
         {
-           try
-           {
+            try
+            {
                 string name = ChatNameBox.Text.Trim();
                 if (string.IsNullOrEmpty(name))
                 {
@@ -81,13 +70,13 @@ namespace Client_Messanger
                 }
                 Chat newChat = new Chat
                 {
-                   
+
                     Chat_Name = ChatNameBox.Text
                 };
                 AppData.db.Chats.Add(newChat);
                 await AppData.db.SaveChangesAsync();
 
-               
+
                 user.Chats.Add(newChat);
                 await AppData.db.SaveChangesAsync();
                 NavigationService?.Navigate(new chat_view(nickname, emailuser));
@@ -96,7 +85,7 @@ namespace Client_Messanger
             {
                 MessageBox.Show(ex.InnerException?.Message ?? ex.Message);
             }
-            
+
         }
     }
 }

@@ -1,22 +1,12 @@
 ﻿using Db_messenger.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Client_Messanger
 {
@@ -25,7 +15,7 @@ namespace Client_Messanger
     /// </summary>
     public partial class ChoiceLogRegPage : Page
     {
-        
+
         List<User> users;
         public ChoiceLogRegPage()
         {
@@ -41,12 +31,12 @@ namespace Client_Messanger
             {
                 Console.WriteLine(ex.Message);
             }
-            
+
         }
 
         public async void GetUsersAsycn()
         {
-            
+
             try
             {
                 users = await GetUsers();
@@ -130,17 +120,17 @@ namespace Client_Messanger
             bool logining = false;
             if (PassTxr.Text != "" && EmailTxt.Text != "")
             {
-                foreach(var item in users)
+                foreach (var item in users)
                 {
-                    if(item.Email == EmailTxt.Text && item.Password == GetHash(PassTxr.Text))
+                    if (item.Email == EmailTxt.Text && item.Password == GetHash(PassTxr.Text))
                     {
                         logining = true;
-                        NavigationService.Navigate(new chat_view(item.Nickname,item.Email));
+                        NavigationService.Navigate(new chat_view(item.Nickname, item.Email));
                     }
-                    
+
 
                 }
-                if(logining != true)
+                if (logining != true)
                 {
                     MessageBox.Show("Неправильний пароль або пошта");
                 }

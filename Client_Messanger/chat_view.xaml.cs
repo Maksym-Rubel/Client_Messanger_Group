@@ -1,20 +1,12 @@
 ﻿using Db_messenger.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
+
 
 namespace Client_Messanger
 {
@@ -23,6 +15,9 @@ namespace Client_Messanger
     /// </summary>
     public partial class chat_view : Page
     {
+        int chatid;
+        int userid;
+
         ViewModel model;
         string nickname = "Maksum";
         string emailuser = "rubelmaksum2404@gmail.com";
@@ -34,82 +29,70 @@ namespace Client_Messanger
             this.DataContext = model;
             LoadParticipants(new List<string> { "User1" });
             SetChatTitle("Оберіть чат", "особистий");
-            GetUsersAsycn();
-            //GetChatAsycn();
+            GetChatAsync();
+
+
         }
-        public async void GetChatAsycn()
+        public async Task<List<Chat>> GetChats()
         {
-            List<Chat> chats = await AppData.db.Chats.Include(c => c.Users).ToListAsync();
+            return await AppData.db.Chats.Include(w => w.Users).ToListAsync();
+        }
+        public async void GetChatAsync()
+        {
+            List<Chat> chats = await GetChats();
 
 
             var user = await AppData.db.Users
                 .FirstOrDefaultAsync(u => u.Email == emailuser);
-
+            userid = user.Id;
             if (user == null) return;
 
-            var userChats = chats
-                .Where(c => c.Users.Any(u => u.Id == user.Id))
-                .ToList();
-
-            ChatListBox.Items.Clear(); 
+            var userChats = await AppData.db.Chats
+            .Include(c => c.Users)
+            .Where(c => c.Users.Any(u => u.Email == emailuser))
+            .ToListAsync();
+            ChatListBox.Items.Clear();
             foreach (var userChat in userChats)
             {
                 ChatListBox.Items.Add(userChat.Chat_Name);
             }
         }
-  
-        public async void GetUsersAsycn()
+
+        private void TxtBox_Lost_Second(object sender, RoutedEventArgs e)
         {
-            List<Messages> messages = await GetUsers();
-
-            //AppData.db.Users.Add(newUser);
-            //await AppData.db.SaveChangesAsync();
-            foreach (var item in messages)
+            TextBox tb = sender as TextBox;
+            if (string.IsNullOrWhiteSpace(tb.Text))
             {
-                var user = AppData.db.Users.FirstOrDefault(u => u.Id == item.UserId);
-                string senderName = user != null ? user.Nickname : "Невідомий користувач";
-                string email = user != null ? user.Email : "Невідомий користувач";
-
-                if (email == emailuser)
-                {
-                    senderName = "Ви";
-                }
-                MyMessage myMessage = new MyMessage
-                {
-                    Sender = senderName,
-                    Message = item.M_Text,
-                    Time = item.Sent_at.ToShortTimeString()
-                };
-                model.AddProcess(myMessage);
-            };
-            if (ListBoxMessage.Items.Count > 0)
-            {
-                ListBoxMessage.ScrollIntoView(ListBoxMessage.Items[ListBoxMessage.Items.Count - 1]);
+                tb.Text = "Написати повідомлення...";
+                tb.Foreground = Brushes.Gray;
             }
-
         }
-    
-    public async Task<List<Messages>> GetUsers()
-    {
-        return await AppData.db.Messages.ToListAsync();
-    }
-    //public chat_view(string chatName, bool isGroup) 
-    //        : this()
-    //    {
-    //        ChatListBox.Items.Add(chatName);
-    //        ChatListBox.SelectedItem = chatName;
-    //        SetChatTitle(chatName, isGroup ? "груповий" : "особистий");
 
-    //        var participants = isGroup ? new List<string> { "User1", "User2", "User3" } : new List<string> { "User1" };
-    //        LoadParticipants(participants);
-    //    }
+        private void TxtBox_Got_Second(object sender, RoutedEventArgs e)
+        {
+            TextBox tb = sender as TextBox;
+            if (tb.Text == "Написати повідомлення...")
+            {
+                tb.Text = "";
+                tb.Foreground = Brushes.Black;
+            }
+        }
+
+
+
+
+        public async Task<List<Messages>> GetUsers(int chatid)
+        {
+            return await AppData.db.Messages.Where(w => w.ChatId == chatid).ToListAsync();
+        }
+
 
         private void CreateChatBtn(object sender, RoutedEventArgs e)
         {
             NavigationService?.Navigate(new CreateChatWindow());
         }
 
-        private void ChatListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void ChatListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (ChatListBox.SelectedItem != null)
             {
@@ -117,8 +100,46 @@ namespace Client_Messanger
                 bool isGroup = chatName.Contains("[група]");
                 SetChatTitle(chatName, isGroup ? "груповий" : "особистий");
 
-                List<string> participants = isGroup ? new List<string> { "User1", "User2", "User3" } : new List<string> { "User1" };
-                LoadParticipants(participants);
+
+                string name = ChatListBox.SelectedItem.ToString();
+
+                Chat chat = AppData.db.Chats.FirstOrDefault(w => w.Chat_Name == name);
+
+                chatid = chat.Id;
+                List<Messages> messages = await GetUsers(chat.Id);
+                model.ClearProcess();
+
+                foreach (var item in messages)
+                {
+                    var user = AppData.db.Users.FirstOrDefault(u => u.Id == item.UserId);
+                    string senderName = user != null ? user.Nickname : "Невідомий користувач";
+                    string email = user != null ? user.Email : "Невідомий користувач";
+
+                    if (email == emailuser)
+                    {
+                        senderName = "Ви";
+                    }
+                    MyMessage myMessage = new MyMessage
+                    {
+                        Sender = senderName,
+                        Message = item.M_Text,
+                        Time = item.Sent_at.ToShortTimeString()
+                    };
+                    model.AddProcess(myMessage);
+                };
+                if (ListBoxMessage.Items.Count > 0)
+                {
+                    ListBoxMessage.ScrollIntoView(ListBoxMessage.Items[ListBoxMessage.Items.Count - 1]);
+                }
+                ParticipantsListBox.Items.Clear();
+
+                var userChats = await AppData.db.Users.Include(c => c.Chats).Where(c => c.Chats.Any(u => u.Id == chatid)).ToListAsync();
+                foreach (var item in userChats)
+                {
+                    ParticipantsListBox.Items.Add(item.Nickname);
+                }
+
+
             }
         }
 
@@ -129,49 +150,31 @@ namespace Client_Messanger
             {
                 Messages newmessage = new Messages
                 {
-                    ChatId = 1,
-                    UserId = 9,
+                    ChatId = chatid,
+                    UserId = userid,
                     M_Text = message,
                     Sent_at = DateTime.Now,
                 };
                 AppData.db.Messages.Add(newmessage);
                 await AppData.db.SaveChangesAsync();
-                //AddMessage("Ви", message);
                 MyMessage myMessage = new MyMessage
-                    { Sender = "Ви",
+                {
+                    Sender = "Ви",
                     Message = message,
-                    Time = DateTime.Now.ToShortTimeString() };
+                    Time = DateTime.Now.ToShortTimeString()
+                };
                 model.AddProcess(myMessage);
                 MessageInput.Clear();
                 if (ListBoxMessage.Items.Count > 0)
                 {
                     ListBoxMessage.ScrollIntoView(ListBoxMessage.Items[ListBoxMessage.Items.Count - 1]);
                 }
+                MessageInput.Text = "Написати повідомлення...";
+                MessageInput.Foreground = Brushes.Gray;
             }
         }
 
-        private void AddMessage(string senderName, string text)
-        {
-            StackPanel messagePanel = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(0, 5, 0, 5) };
 
-            TextBlock nameText = new TextBlock
-            {
-                Text = senderName + ": ",
-                FontWeight = FontWeights.Bold,
-                Margin = new Thickness(0, 0, 5, 0)
-            };
-
-            TextBlock messageText = new TextBlock
-            {
-                Text = text,
-                TextWrapping = TextWrapping.Wrap,
-                MaxWidth = 500
-            };
-
-            messagePanel.Children.Add(nameText);
-            messagePanel.Children.Add(messageText);
-            //MessagesPanel.Children.Add(messagePanel);
-        }
 
         private void LoadParticipants(List<string> users)
         {
@@ -214,13 +217,13 @@ namespace Client_Messanger
                 int caretIndex = MessageInput.CaretIndex;
                 MessageInput.Text = MessageInput.Text.Insert(caretIndex, "\n");
                 MessageInput.CaretIndex = caretIndex + 1;
-                
+
             }
             else if (e.Key == Key.Enter)
             {
                 SendBtn(sender, e);
             }
-           
+
         }
         private void MyListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -230,8 +233,13 @@ namespace Client_Messanger
 
         private void MyListBox_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            
+
             e.Handled = true;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 
@@ -258,6 +266,10 @@ namespace Client_Messanger
         {
             files.Add(info);
         }
-        
+        public void ClearProcess()
+        {
+            files.Clear();
+        }
+
     }
 }

@@ -174,6 +174,50 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <SolidColorBrush x:Key="TextBox.Static.Border" Color="#FFABAdB3"/>
+        <SolidColorBrush x:Key="TextBox.MouseOver.Border" Color="#2372c2"/>
+        <SolidColorBrush x:Key="TextBox.Focus.Border" Color="#FF569DE5"/>
+        <Style x:Key="TextBoxLoginStyle" TargetType="{x:Type TextBox}">
+            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource TextBox.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="AllowDrop" Value="true"/>
+            <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
+            <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TextBox}">
+                        <Border x:Name="border" CornerRadius="13" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="True">
+                            <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Opacity" TargetName="border" Value="0.56"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource TextBox.MouseOver.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource TextBox.Focus.Border}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsInactiveSelectionHighlightEnabled" Value="true"/>
+                        <Condition Property="IsSelectionActive" Value="false"/>
+                    </MultiTrigger.Conditions>
+                    <Setter Property="SelectionBrush" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}"/>
+                </MultiTrigger>
+            </Style.Triggers>
+        </Style>
     </Page.Resources>
 
     <Grid>
@@ -200,6 +244,7 @@
                 <ListBox Grid.Row="2" Name="ChatListBox" Margin="10" Background="Transparent"
                          BorderThickness="0"
                          SelectionChanged="ChatListBox_SelectionChanged"
+                         
                          />
             </Grid>
         </Border>
@@ -295,10 +340,12 @@
 
                     </Grid.ColumnDefinitions>
                     <TextBox Name="MessageInput"
+                             Style="{DynamicResource TextBoxLoginStyle}"
                              KeyDown="MessageInput_KeyDown"
-                             FontSize="14"
-                             Padding="10"
+                                
+                           
                              Margin="0,0,5,0"
+                             Text="Написати повідомлення..."
                              VerticalAlignment="Center"
                              BorderBrush="#cccccc"
                              BorderThickness="1"
@@ -309,9 +356,10 @@
                              VerticalScrollBarVisibility="Hidden"
                              AcceptsReturn="False"
                              TextWrapping="Wrap"
-                             VerticalContentAlignment="Top"
+                             LostFocus="TxtBox_Lost_Second" GotFocus="TxtBox_Got_Second"
                              HorizontalAlignment="Stretch"
                              DockPanel.Dock="Left"
+                             Padding="10,2,0,0" FontSize="15" VerticalContentAlignment="Center" FontFamily="Helvetica" FontWeight="Medium" Foreground="#8584a1"
                              />
                     <Button Style="{DynamicResource ButtonStyle1}"  Name="SendButton"
                             Content="➤"
@@ -338,17 +386,25 @@
 
         <!-- Панель учасників -->
         <Border Grid.Column="2" Background="#f7f7f7" BorderBrush="#ddd" BorderThickness="1,0,0,0">
-            <StackPanel>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+
+
+                </Grid.RowDefinitions>
                 <TextBlock Text="Учасники чату" FontSize="16" FontWeight="Bold" Margin="10"/>
-                <ListBox Name="ParticipantsListBox" Margin="10">
+                <ListBox Grid.Row="1" Name="ParticipantsListBox" Margin="3" BorderThickness="0">
                      
-                    <StackPanel Orientation="Horizontal">
-                        <Ellipse Width="10" Height="10" Fill="Green" Margin="0,0,5,0"/>
-                        <TextBlock Text="User1"/>
-                    </StackPanel>
+                    
                     
                 </ListBox>
-            </StackPanel>
+                <Button Grid.Row="2" Style="{DynamicResource LoginButtonTemp}" RenderTransformOrigin="0.5,0.5" FontSize="15" FontWeight="UltraBold" Height="50" Background="#0082ff" Foreground="#daeefc"  Content="➕ Додати учасника" Margin="10" Click="Button_Click"></Button>
+            </Grid>
         </Border>
     </Grid>
 </Page>

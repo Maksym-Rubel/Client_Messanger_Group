@@ -17,7 +17,7 @@ namespace Db_messenger
         {
            
                 base.OnConfiguring(optionsBuilder);
-                optionsBuilder.UseSqlServer(@"Data Source=DESKTOP-JELVTGO\SQLEXPRESS;
+                optionsBuilder.UseSqlServer(@"Data Source=192.168.1.121,1433;
                                                 Initial Catalog=Group_Messenger_DB;
                                                 User ID=group_user;
                                                 Password=NewStrongPasswordHere;

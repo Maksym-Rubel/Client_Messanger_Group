@@ -25,6 +25,7 @@ namespace Db_messenger
                                                 TrustServerCertificate=True;
                                                 Application Intent=ReadWrite;
                                                 Multi Subnet Failover=False;",
+
                                                 sqlOptions => sqlOptions.EnableRetryOnFailure());
           
            

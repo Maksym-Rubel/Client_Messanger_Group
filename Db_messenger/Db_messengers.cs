@@ -17,14 +17,9 @@ namespace Db_messenger
         {
 
             base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseSqlServer(@"Data Source=37.54.60.152,1433;
-                                                Initial Catalog=Group_Messenger_DB;
-                                                User ID=group_user;
-                                                Password=NewStrongPasswordHere;
-                                                Encrypt=False;
-                                                TrustServerCertificate=True;
-                                                Application Intent=ReadWrite;
-                                                Multi Subnet Failover=False;",
+
+            optionsBuilder.UseSqlServer(@"Data Source=37.54.60.152,1433;Initial Catalog=Group_Messenger_DB;User ID=group_user;Password=NewStrongPasswordHere;Encrypt=False;TrustServerCertificate=True;"
+
 
                                             sqlOptions => sqlOptions.EnableRetryOnFailure());
 

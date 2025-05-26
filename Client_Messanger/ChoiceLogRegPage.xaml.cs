@@ -49,7 +49,11 @@ namespace Client_Messanger
         public async Task<List<User>> GetUsers()
         {
 
-
+            if (AppData.db == null)
+            {
+                MessageBox.Show("База даних не ініціалізована!");
+                return new List<User>();
+            }
             return await AppData.db.Users.ToListAsync();
 
 

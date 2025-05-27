@@ -18,10 +18,15 @@ namespace Db_messenger
 
             base.OnConfiguring(optionsBuilder);
 
-            optionsBuilder.UseSqlServer(@"Data Source=37.54.60.152,1433;Initial Catalog=Group_Messenger_DB;User ID=group_user;Password=NewStrongPasswordHere;Encrypt=False;TrustServerCertificate=True;"
-
-
-                                            sqlOptions => sqlOptions.EnableRetryOnFailure());
+            optionsBuilder.UseSqlServer(
+                @"Server=37.54.60.152,1433;
+                  Database=Group_Messenger_DB;
+                  User ID=group_user;
+                  Password=NewStrongPasswordHere;
+                  Encrypt=False;
+                  TrustServerCertificate=True;",
+                sqlOptions => sqlOptions.EnableRetryOnFailure()
+            );
 
 
 

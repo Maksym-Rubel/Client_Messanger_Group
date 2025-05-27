@@ -1,6 +1,10 @@
 ﻿using Db_messenger.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
+using System.IO;
+using System.Net.Sockets;
+using System.Text;
+using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -15,23 +19,38 @@ namespace Client_Messanger
     /// </summary>
     public partial class chat_view : Page
     {
-        int chatid;
+        public int chatid;
         int userid;
-
+        TcpChatClient tcpChatClient = new TcpChatClient();
         ViewModel model;
-        string nickname = "Maksum";
-        string emailuser = "rubelmaksum2404@gmail.com";
+        string nickname = "";
+        string emailuser = "";
 
         public chat_view(string NickName, string Email)
         {
             InitializeComponent();
             model = new ViewModel();
             this.DataContext = model;
+            nickname = NickName;
+            emailuser = Email;
             LoadParticipants(new List<string> { "User1" });
             SetChatTitle("Оберіть чат", "особистий");
             GetChatAsync();
+            this.Loaded += ChatView_Loaded;
 
 
+        }
+        private async void ChatView_Loaded(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                await tcpChatClient.ConnectAsync("127.0.0.1", 5000, nickname, emailuser, model);
+                await tcpChatClient.StartListeningAsync();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Не вдалося підключитися до сервера: " + ex.Message);
+            }
         }
         public async Task<List<Chat>> GetChats()
         {
@@ -89,7 +108,7 @@ namespace Client_Messanger
 
         private void CreateChatBtn(object sender, RoutedEventArgs e)
         {
-            NavigationService?.Navigate(new CreateChatWindow());
+            NavigationService?.Navigate(new CreateChatWindow(nickname, emailuser));
         }
 
         private async void ChatListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -106,6 +125,7 @@ namespace Client_Messanger
                 Chat chat = AppData.db.Chats.FirstOrDefault(w => w.Chat_Name == name);
 
                 chatid = chat.Id;
+                tcpChatClient.SetChatId(chatid);
                 List<Messages> messages = await GetUsers(chat.Id);
                 model.ClearProcess();
 
@@ -168,6 +188,15 @@ namespace Client_Messanger
                 if (ListBoxMessage.Items.Count > 0)
                 {
                     ListBoxMessage.ScrollIntoView(ListBoxMessage.Items[ListBoxMessage.Items.Count - 1]);
+                }
+                try
+                {
+
+                    await tcpChatClient.SendMessageAsync(message, chatid);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Помилка при відправці: {ex.Message}");
                 }
 
             }
@@ -238,11 +267,96 @@ namespace Client_Messanger
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                string name = ChatListBox.SelectedItem.ToString();
+                NavigationService?.Navigate(new AddNewUserInChat(name));
+            }
+            catch (Exception ex)
+            { MessageBox.Show(ex.Message); }
 
         }
     }
 
+    public class TcpChatClient
+    {
+        private TcpClient client;
+        private StreamWriter writer;
+        private StreamReader reader;
+        private string nickname;
+        private string email;
+        private ViewModel model;
 
+
+        public event Action<string> MessageReceived;
+        public async Task ConnectAsync(string host, int port, string nickname, string email, ViewModel model)
+        {
+            this.nickname = nickname;
+            this.email = email;
+            this.model = model;
+
+            client = new TcpClient();
+            await client.ConnectAsync(host, port);
+            var stream = client.GetStream();
+            writer = new StreamWriter(stream, Encoding.UTF8) { AutoFlush = true };
+            reader = new StreamReader(stream, Encoding.UTF8);
+        }
+        private int chatId;
+
+        public void SetChatId(int id)
+        {
+            chatId = id;
+        }
+        public async Task SendMessageAsync(string text, int chatId1)
+        {
+            var chatMessage = new ChatMessages
+            {
+                Type = "Message",
+                From = nickname,
+                Email = email,
+                Content = text,
+                DateTime = DateTime.Now.ToShortTimeString(),
+                chatid = chatId1
+            };
+
+            string json = JsonSerializer.Serialize(chatMessage);
+            await writer.WriteLineAsync(json);
+        }
+        public async Task StartListeningAsync()
+        {
+            try
+            {
+                while (true)
+                {
+                    string line = await reader.ReadLineAsync();
+                    if (line == null) break;
+                    MessageReceived?.Invoke(line);
+                    ChatMessages message = JsonSerializer.Deserialize<ChatMessages>(line);
+                    //MessageBox.Show(line);
+                    //MessageBox.Show($"{message.Email}{email}{message}{line}");
+                    if (message.Email != email && message.chatid == chatId)
+                    {
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            MyMessage myMessage = new MyMessage
+                            {
+                                Sender = message.From,
+                                Message = message.Content,
+                                Time = message.DateTime,
+                            };
+                            model.AddProcess(myMessage);
+                        });
+                    }
+
+                }
+            }
+            catch { }
+        }
+        public void Disconnect()
+        {
+            client.Close();
+        }
+    }
     public class MyMessage()
     {
         public string Sender { get; set; }

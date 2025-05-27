@@ -315,7 +315,7 @@
                                         <TextBlock Grid.Row="1" Grid.Column="0"  Text="{Binding Message}"
                                         Foreground="#393d40"
                                         TextWrapping="Wrap" />
-                                        <TextBlock  Grid.Row="1" Grid.Column="1" Margin="5 5 0 0" Text="{Binding Time}"
+                                        <TextBlock  Grid.Row="1" Grid.Column="1" VerticalAlignment="Bottom" Margin="5 5 0 0" Text="{Binding Time}"
                                         HorizontalAlignment="Right"
                                         Foreground="#393d40"
                                         FontSize="10"

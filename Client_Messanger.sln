@@ -5,9 +5,11 @@ VisualStudioVersion = 17.11.35222.181
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Client_Messanger", "Client_Messanger\Client_Messanger.csproj", "{DA3E34D6-EBE2-4489-87DC-63BDB3C55071}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdminWindow", "AdminWindow\AdminWindow.csproj", "{49471967-B2DB-41DD-96D7-9433E2B9F608}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminWindow", "AdminWindow\AdminWindow.csproj", "{49471967-B2DB-41DD-96D7-9433E2B9F608}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Db_messenger", "Db_messenger\Db_messenger.csproj", "{6B251652-C66D-48A3-B647-1697BECACA5F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Db_messenger", "Db_messenger\Db_messenger.csproj", "{6B251652-C66D-48A3-B647-1697BECACA5F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server_Nika", "Server_Nika\Server_Nika.csproj", "{4BBD0624-15D8-41D0-AC82-CE9AA11059A9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{6B251652-C66D-48A3-B647-1697BECACA5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6B251652-C66D-48A3-B647-1697BECACA5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6B251652-C66D-48A3-B647-1697BECACA5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4BBD0624-15D8-41D0-AC82-CE9AA11059A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4BBD0624-15D8-41D0-AC82-CE9AA11059A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4BBD0624-15D8-41D0-AC82-CE9AA11059A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4BBD0624-15D8-41D0-AC82-CE9AA11059A9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

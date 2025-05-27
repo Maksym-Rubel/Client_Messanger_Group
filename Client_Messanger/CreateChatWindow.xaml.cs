@@ -11,11 +11,13 @@ namespace Client_Messanger
     /// </summary>
     public partial class CreateChatWindow : Page
     {
-        string nickname = "Maksum";
-        string emailuser = "rubelmaksum2404@gmail.com";
-        public CreateChatWindow()
+        string nickname = "";
+        string emailuser = "";
+        public CreateChatWindow(string name, string email)
         {
             InitializeComponent();
+            nickname = name;
+            emailuser = email;
         }
         private void TxtBox_Lost_Second(object sender, RoutedEventArgs e)
         {

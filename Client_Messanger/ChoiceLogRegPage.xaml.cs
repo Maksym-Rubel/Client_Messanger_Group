@@ -125,7 +125,8 @@ namespace Client_Messanger
                     if (item.Email == EmailTxt.Text && item.Password == GetHash(PassTxr.Text))
                     {
                         logining = true;
-                        NavigationService.Navigate(new chat_view(item.Nickname, item.Email));
+                        NavigationService.Navigate(new chat_view(item.Nickname, EmailTxt.Text));
+
                     }
 
 

@@ -49,7 +49,7 @@ namespace Client_Messanger
         {
             try
             {
-                await tcpChatClient.ConnectAsync("3526-37-54-60-152.ngrok-free.app", 443, nickname, emailuser, model);
+                await tcpChatClient.ConnectAsync("127.0.0.1", 5000, nickname, emailuser, model);
                 await tcpChatClient.StartListeningAsync();
             }
             catch (Exception ex)

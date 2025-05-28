@@ -335,16 +335,41 @@
             <Border Grid.Row="2" BorderThickness="1,1,0,0" BorderBrush="#ccc" Background="White" Padding="5">
                 <Grid>
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"></ColumnDefinition>
+
                         <ColumnDefinition Width="*"></ColumnDefinition>
                         <ColumnDefinition Width="auto"></ColumnDefinition>
 
                     </Grid.ColumnDefinitions>
+                    <Button Style="{DynamicResource ButtonStyle1}"  
+                        
+                        Width="40"
+                        Height="40"
+                        Background="#0082ff"
+                        Foreground="White"
+                        FontSize="18"
+                        
+                        
+                        VerticalContentAlignment="Center"
+                        HorizontalContentAlignment="Center"
+                        Padding="0"
+                        Grid.Column="0"
+                        FontWeight="Bold"
+                        BorderThickness="0"
+                        Cursor="Hand"
+                        VerticalAlignment="Center"
+                        DockPanel.Dock="Right"
+                        Click="SelectFIle"
+                            >
+                        <Image   Name="myImage" Height="30" Width="30"  >
+                        </Image>
+                    </Button>
                     <TextBox Name="MessageInput"
                              Style="{DynamicResource TextBoxLoginStyle}"
                              KeyDown="MessageInput_KeyDown"
                                 
                            
-                             Margin="0,0,5,0"
+                             Margin="5,0,5,0"
                              Text="Написати повідомлення..."
                              VerticalAlignment="Center"
                              BorderBrush="#cccccc"
@@ -352,7 +377,7 @@
                              Background="White"
                              MinHeight="40"
                              MaxHeight="120"
-                             Grid.Column="0"
+                             Grid.Column="1"
                              VerticalScrollBarVisibility="Hidden"
                              AcceptsReturn="False"
                              TextWrapping="Wrap"
@@ -371,7 +396,7 @@
                             VerticalContentAlignment="Center"
                             HorizontalContentAlignment="Center"
                             Padding="0"
-                            Grid.Column="1"
+                            Grid.Column="2"
                             FontWeight="Bold"
                             BorderThickness="0"
                             Cursor="Hand"

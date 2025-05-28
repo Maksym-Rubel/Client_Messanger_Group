@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="images\buttonIcon.png" />
     <None Remove="images\messenger icon.png" />
     <None Remove="images\messenger.png" />
     <None Remove="images\register.png" />
@@ -20,6 +21,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="images\buttonIcon.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="images\messenger.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>

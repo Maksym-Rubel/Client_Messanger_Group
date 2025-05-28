@@ -11,7 +11,9 @@
         public string Content { get; set; } = "";
         public string DateTime { get; set; } = "";
 
-        public byte[]? FileBytes { get; set; }
+        public string FileBytes { get; set; } = "";
+
+
         public string? FileName { get; set; }
     }
 }

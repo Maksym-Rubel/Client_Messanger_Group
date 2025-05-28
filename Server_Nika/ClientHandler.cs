@@ -43,9 +43,17 @@ namespace Server_Nika
 
         public void SendMessage(ChatMessage message)
         {
-            var json = JsonSerializer.Serialize(message);
-            var buffer = Encoding.UTF8.GetBytes(json + "\n");
-            stream.Write(buffer, 0, buffer.Length);
+            try
+            {
+                var json = JsonSerializer.Serialize(message);
+                var buffer = Encoding.UTF8.GetBytes(json + "\n");
+                stream.Write(buffer, 0, buffer.Length);
+                stream.Flush();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Помилка під час надсилання: {ex.Message}");
+            }
         }
 
         private void HandleMessage(ChatMessage message)
@@ -74,6 +82,7 @@ namespace Server_Nika
 
                 case "File":
                     FileTransferService.HandleFile(message);
+                    server.BroadcastMessage(message, message.From);
                     break;
             }
         }

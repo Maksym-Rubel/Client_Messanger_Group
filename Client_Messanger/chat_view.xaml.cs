@@ -1,5 +1,6 @@
 ﻿using Db_messenger.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Win32;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Net.Sockets;
@@ -9,7 +10,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Path = System.IO.Path;
 
 
 namespace Client_Messanger
@@ -36,7 +39,9 @@ namespace Client_Messanger
             LoadParticipants(new List<string> { "User1" });
             SetChatTitle("Оберіть чат", "особистий");
             GetChatAsync();
+            myImage.Source = new BitmapImage(new Uri("pack://application:,,,/images/buttonIcon.png"));
             this.Loaded += ChatView_Loaded;
+            Directory.CreateDirectory("ReceivedFile");
 
 
         }
@@ -276,6 +281,24 @@ namespace Client_Messanger
             { MessageBox.Show(ex.Message); }
 
         }
+
+        private async void SelectFIle(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog dialog = new OpenFileDialog();
+            if (dialog.ShowDialog() == true)
+            {
+                await tcpChatClient.SendFileAsync(dialog.FileName, chatid);
+                Messages newmessage = new Messages
+                {
+                    ChatId = chatid,
+                    UserId = userid,
+                    M_Text = Path.GetFileName(dialog.FileName),
+                    Sent_at = DateTime.Now,
+                };
+                AppData.db.Messages.Add(newmessage);
+                await AppData.db.SaveChangesAsync();
+            }
+        }
     }
 
     public class TcpChatClient
@@ -322,6 +345,37 @@ namespace Client_Messanger
             string json = JsonSerializer.Serialize(chatMessage);
             await writer.WriteLineAsync(json);
         }
+        public async Task SendFileAsync(string filePath, int chatId1)
+        {
+            //MessageBox.Show(filePath);
+            var fileBytes = await File.ReadAllBytesAsync(filePath);
+            var fileName = Path.GetFileName(filePath);
+            var chatMessage = new ChatMessages
+            {
+                Type = "File",
+                From = nickname,
+                Email = email,
+                DateTime = DateTime.Now.ToShortTimeString(),
+                chatid = chatId1,
+                FileBytes = Convert.ToBase64String(fileBytes),
+                FileName = fileName
+
+
+            };
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                MyMessage myMessage = new MyMessage
+                {
+                    Sender = nickname,
+                    Message = $"File:{fileName}",
+                    Time = DateTime.Now.ToShortTimeString(),
+
+                };
+                model.AddProcess(myMessage);
+            });
+            string json = JsonSerializer.Serialize(chatMessage);
+            await writer.WriteLineAsync(json);
+        }
         public async Task StartListeningAsync()
         {
             try
@@ -334,18 +388,43 @@ namespace Client_Messanger
                     ChatMessages message = JsonSerializer.Deserialize<ChatMessages>(line);
                     //MessageBox.Show(line);
                     //MessageBox.Show($"{message.Email}{email}{message}{line}");
+
                     if (message.Email != email && message.chatid == chatId)
                     {
-                        Application.Current.Dispatcher.Invoke(() =>
+                        if (message.Type == "Message")
                         {
-                            MyMessage myMessage = new MyMessage
+                            Application.Current.Dispatcher.Invoke(() =>
                             {
-                                Sender = message.From,
-                                Message = message.Content,
-                                Time = message.DateTime,
-                            };
-                            model.AddProcess(myMessage);
-                        });
+                                MyMessage myMessage = new MyMessage
+                                {
+                                    Sender = message.From,
+                                    Message = message.Content,
+                                    Time = message.DateTime,
+                                };
+                                model.AddProcess(myMessage);
+                            });
+                        }
+                        else if (message.Type == "File")
+                        {
+                            byte[] filebytes = Convert.FromBase64String(message.FileBytes);
+                            string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                            string directory = Path.Combine(documentsPath, "ReceivedFile");
+                            Directory.CreateDirectory(directory);
+                            string safeFileName = Path.GetFileName(message.FileName);
+                            string path = Path.Combine(directory, safeFileName);
+                            File.WriteAllBytes(path, filebytes);
+                            Application.Current.Dispatcher.Invoke(() =>
+                            {
+                                MyMessage myMessage = new MyMessage
+                                {
+                                    Sender = message.From,
+                                    Message = message.FileName,
+                                    Time = message.DateTime,
+                                };
+                                model.AddProcess(myMessage);
+                            });
+                        }
+
                     }
 
                 }

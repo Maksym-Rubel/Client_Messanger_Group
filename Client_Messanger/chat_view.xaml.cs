@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Net.Sockets;
 using System.Text;
@@ -261,13 +262,13 @@ namespace Client_Messanger
         private void MyListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
-            ListBoxMessage.SelectedIndex = -1;
+            //ListBoxMessage.SelectedIndex = -1;
         }
 
         private void MyListBox_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
 
-            e.Handled = true;
+            //e.Handled = true;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -297,6 +298,37 @@ namespace Client_Messanger
                 };
                 AppData.db.Messages.Add(newmessage);
                 await AppData.db.SaveChangesAsync();
+            }
+        }
+
+        private void ListBoxMessage_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            MessageBox.Show(ListBoxMessage.SelectedItems.ToString());
+            var selectedMessage = ListBoxMessage.SelectedItem as MyMessage;
+            if (selectedMessage != null)
+            {
+                MessageBox.Show(selectedMessage.Message);
+
+                string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                string directory = Path.Combine(documentsPath, "ReceivedFile");
+                MessageBox.Show(directory);
+                string path = Path.Combine(directory, selectedMessage.Message);
+                MessageBox.Show(path);
+                Process.Start("explorer.exe", $"/select,\"{path}\"");
+
+            }
+            else
+            {
+                MessageBox.Show("Немає вибраного повідомлення.");
+            }
+
+
+        }
+        public void ScrollDown()
+        {
+            if (ListBoxMessage.Items.Count > 0)
+            {
+                ListBoxMessage.ScrollIntoView(ListBoxMessage.Items[ListBoxMessage.Items.Count - 1]);
             }
         }
     }
@@ -404,6 +436,7 @@ namespace Client_Messanger
                                     Time = message.DateTime,
                                 };
                                 model.AddProcess(myMessage);
+
                             });
                         }
                         else if (message.Type == "File")
@@ -433,6 +466,9 @@ namespace Client_Messanger
             }
             catch { }
         }
+
+
+
         public void Disconnect()
         {
             client.Close();

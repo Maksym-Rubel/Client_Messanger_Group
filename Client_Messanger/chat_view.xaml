@@ -282,11 +282,11 @@
                     <!-- Повідомлення буде додано динамічно 
                 </StackPanel>
             </ScrollViewer>-->
-            <ListBox Style="{DynamicResource ListBoxStyle1}"  SelectionMode="Single"   ItemsSource="{Binding Files}" Name="ListBoxMessage" Grid.Row="1" Background="White"
+            <ListBox Style="{DynamicResource ListBoxStyle1}" MouseDoubleClick="ListBoxMessage_MouseDoubleClick" SelectionMode="Single"   ItemsSource="{Binding Files}" Name="ListBoxMessage" Grid.Row="1" Background="White"
                       SelectionChanged="MyListBox_SelectionChanged"
                       PreviewMouseDown="MyListBox_PreviewMouseDown"
                       ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                      Focusable="False">
+                      >
                 
 
                 <ListBox.ItemTemplate>

@@ -49,7 +49,7 @@ namespace Client_Messanger
         {
             try
             {
-                await tcpChatClient.ConnectAsync("127.0.0.1", 5000, nickname, emailuser, model);
+                await tcpChatClient.ConnectAsync("37.54.60.152", 5000, nickname, emailuser, model);
                 await tcpChatClient.StartListeningAsync();
             }
             catch (Exception ex)
@@ -332,6 +332,8 @@ namespace Client_Messanger
         }
         public async Task SendMessageAsync(string text, int chatId1)
         {
+            if (writer == null)
+                throw new InvalidOperationException("TcpChatClient не підключений. Викличте ConnectAsync перед відправкою повідомлень.");
             var chatMessage = new ChatMessages
             {
                 Type = "Message",

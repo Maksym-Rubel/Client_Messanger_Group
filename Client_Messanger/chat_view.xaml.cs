@@ -27,17 +27,22 @@ namespace Client_Messanger
         int userid;
         TcpChatClient tcpChatClient = new TcpChatClient();
         ViewModel model;
+
         string nickname = "";
         string emailuser = "";
+
 
         public chat_view(string NickName, string Email)
         {
             InitializeComponent();
             model = new ViewModel();
+
             this.DataContext = model;
+
+
             nickname = NickName;
             emailuser = Email;
-            LoadParticipants(new List<string> { "User1" });
+
             SetChatTitle("Оберіть чат", "особистий");
             GetChatAsync();
             myImage.Source = new BitmapImage(new Uri("pack://application:,,,/images/buttonIcon.png"));
@@ -46,6 +51,7 @@ namespace Client_Messanger
 
 
         }
+
         private async void ChatView_Loaded(object sender, RoutedEventArgs e)
         {
             try
@@ -64,22 +70,42 @@ namespace Client_Messanger
         }
         public async void GetChatAsync()
         {
-            List<Chat> chats = await GetChats();
-
-
-            var user = await AppData.db.Users
-                .FirstOrDefaultAsync(u => u.Email == emailuser);
-            userid = user.Id;
-            if (user == null) return;
-
-            var userChats = await AppData.db.Chats
-            .Include(c => c.Users)
-            .Where(c => c.Users.Any(u => u.Email == emailuser))
-            .ToListAsync();
-            ChatListBox.Items.Clear();
-            foreach (var userChat in userChats)
+            try
             {
-                ChatListBox.Items.Add(userChat.Chat_Name);
+                List<Chat> chats = await GetChats();
+
+
+                var user = await AppData.db.Users
+                    .FirstOrDefaultAsync(u => u.Email == emailuser);
+                userid = user.Id;
+                if (user == null) return;
+
+                var userChats = await AppData.db.Chats
+                .Include(c => c.Users)
+                .Where(c => c.Users.Any(u => u.Email == emailuser))
+                .ToListAsync();
+                model.ClearProcessChat();
+                foreach (var userChat in userChats)
+                {
+                    Messages messages = AppData.db.Messages
+                    .Where(m => m.ChatId == userChat.Id)
+                    .OrderByDescending(m => m.Id)
+                    .FirstOrDefault()!;
+
+                    string lastMessage = messages != null ? messages.M_Text : "Немає повідомленнь";
+                    string lastTime = messages != null ? messages.Sent_at.ToShortTimeString() : "";
+                    if (lastMessage.Length > 25)
+                    {
+                        lastMessage = lastMessage.Substring(0, 25) + "…";
+
+                    }
+                    MyChats myChat = new MyChats { ChatId = chatid, ChatName = userChat.Chat_Name, LastMessage = lastMessage, LastTime = lastTime };
+                    model.AddProcessChat(myChat);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
 
@@ -119,54 +145,65 @@ namespace Client_Messanger
 
         private async void ChatListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (ChatListBox.SelectedItem != null)
+            try
             {
-                string chatName = ChatListBox.SelectedItem.ToString();
-                bool isGroup = chatName.Contains("[група]");
-                SetChatTitle(chatName, isGroup ? "груповий" : "особистий");
-
-
-                string name = ChatListBox.SelectedItem.ToString();
-
-                Chat chat = AppData.db.Chats.FirstOrDefault(w => w.Chat_Name == name);
-
-                chatid = chat.Id;
-                tcpChatClient.SetChatId(chatid);
-                List<Messages> messages = await GetUsers(chat.Id);
-                model.ClearProcess();
-
-                foreach (var item in messages)
+                if (ChatListBox.SelectedItem != null)
                 {
-                    var user = AppData.db.Users.FirstOrDefault(u => u.Id == item.UserId);
-                    string senderName = user != null ? user.Nickname : "Невідомий користувач";
-                    string email = user != null ? user.Email : "Невідомий користувач";
+                    var chat1 = ChatListBox.SelectedItem as MyChats;
+                    string chatName = chat1.ChatName;
+                    bool isGroup = chatName.Contains("[група]");
+                    SetChatTitle(chatName, isGroup ? "груповий" : "особистий");
 
-                    if (email == emailuser)
+
+
+
+                    Chat chat = AppData.db.Chats.FirstOrDefault(w => w.Chat_Name == chatName);
+
+                    chatid = chat.Id;
+                    tcpChatClient.SetChatId(chatid);
+                    List<Messages> messages = await GetUsers(chat.Id);
+                    model.ClearProcess();
+
+                    foreach (var item in messages)
                     {
-                        senderName = "Ви";
-                    }
-                    MyMessage myMessage = new MyMessage
-                    {
-                        Sender = senderName,
-                        Message = item.M_Text,
-                        Time = item.Sent_at.ToShortTimeString()
+                        var user = AppData.db.Users.FirstOrDefault(u => u.Id == item.UserId);
+                        string senderName = user != null ? user.Nickname : "Невідомий користувач";
+                        string email = user != null ? user.Email : "Невідомий користувач";
+
+                        if (email == emailuser)
+                        {
+                            senderName = "Ви";
+                        }
+                        MyMessage myMessage = new MyMessage
+                        {
+                            Sender = senderName,
+                            Message = item.M_Text,
+                            Time = item.Sent_at.ToShortTimeString()
+                        };
+                        model.AddProcess(myMessage);
                     };
-                    model.AddProcess(myMessage);
-                };
-                if (ListBoxMessage.Items.Count > 0)
-                {
-                    ListBoxMessage.ScrollIntoView(ListBoxMessage.Items[ListBoxMessage.Items.Count - 1]);
-                }
-                ParticipantsListBox.Items.Clear();
+                    if (ListBoxMessage.Items.Count > 0)
+                    {
+                        ListBoxMessage.ScrollIntoView(ListBoxMessage.Items[ListBoxMessage.Items.Count - 1]);
+                    }
+                    ParticipantsListBox.Items.Clear();
 
-                var userChats = await AppData.db.Users.Include(c => c.Chats).Where(c => c.Chats.Any(u => u.Id == chatid)).ToListAsync();
-                foreach (var item in userChats)
-                {
-                    ParticipantsListBox.Items.Add(item.Nickname);
+                    var userChats = await AppData.db.Users.Include(c => c.Chats).Where(c => c.Chats.Any(u => u.Id == chatid)).ToListAsync();
+                    foreach (var item in userChats)
+                    {
+                        ParticipantsListBox.Items.Add(item.Nickname);
+                    }
                 }
 
 
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+
+
         }
 
         private async void SendBtn(object sender, RoutedEventArgs e)
@@ -303,7 +340,7 @@ namespace Client_Messanger
 
         private void ListBoxMessage_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            MessageBox.Show(ListBoxMessage.SelectedItems.ToString());
+
             var selectedMessage = ListBoxMessage.SelectedItem as MyMessage;
             if (selectedMessage != null)
             {
@@ -311,9 +348,9 @@ namespace Client_Messanger
 
                 string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                 string directory = Path.Combine(documentsPath, "ReceivedFile");
-                MessageBox.Show(directory);
+
                 string path = Path.Combine(directory, selectedMessage.Message);
-                MessageBox.Show(path);
+
                 Process.Start("explorer.exe", $"/select,\"{path}\"");
 
             }
@@ -436,7 +473,7 @@ namespace Client_Messanger
                                     Time = message.DateTime,
                                 };
                                 model.AddProcess(myMessage);
-
+                                model.ChangeProcessChat(message.Content, chatId);
                             });
                         }
                         else if (message.Type == "File")
@@ -474,7 +511,18 @@ namespace Client_Messanger
             client.Close();
         }
     }
-    public class MyMessage()
+    public class MyChats
+    {
+        public int ChatId { get; set; }
+
+        public string ChatName { get; set; }
+        public string ChatNameFirstLetter => ChatName[0].ToString().ToUpper();
+
+        public string LastMessage { get; set; }
+        public string LastTime { get; set; }
+    }
+
+    public class MyMessage
     {
         public string Sender { get; set; }
         public string Message { get; set; }
@@ -482,15 +530,16 @@ namespace Client_Messanger
     }
     public class ViewModel
     {
+        private ObservableCollection<MyChats> chats;
         private ObservableCollection<MyMessage> files;
         public ViewModel()
         {
             files = new ObservableCollection<MyMessage>();
-
+            chats = new ObservableCollection<MyChats>();
 
         }
         public IEnumerable<MyMessage> Files => files;
-
+        public IEnumerable<MyChats> Chats => chats;
 
         public void AddProcess(MyMessage info)
         {
@@ -499,6 +548,23 @@ namespace Client_Messanger
         public void ClearProcess()
         {
             files.Clear();
+        }
+        public void ChangeProcessChat(string newmes, int chatid)
+        {
+            var chat = chats.Where(m => m.ChatId == chatid).FirstOrDefault();
+            if (chat != null)
+            {
+                chat.LastMessage = newmes;
+            }
+
+        }
+        public void AddProcessChat(MyChats info)
+        {
+            chats.Add(info);
+        }
+        public void ClearProcessChat()
+        {
+            chats.Clear();
         }
 
     }

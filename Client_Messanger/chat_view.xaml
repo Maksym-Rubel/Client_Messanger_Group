@@ -241,11 +241,57 @@
                 </Grid.RowDefinitions>
                 <TextBlock Text="Чати" FontSize="18" FontWeight="Bold" Margin="10"/>
                 <Button  Style="{DynamicResource LoginButtonTemp}" RenderTransformOrigin="0.5,0.5" FontSize="15" FontWeight="UltraBold" Height="50" Background="#0082ff" Foreground="#daeefc" Grid.Row="1" Content="➕ Створити чат" Margin="10" Click="CreateChatBtn"/>
-                <ListBox Grid.Row="2" Name="ChatListBox" Margin="10" Background="Transparent"
+                <ListBox Grid.Row="2" Name="ChatListBox" Margin="3" Background="Transparent"
                          BorderThickness="0"
                          SelectionChanged="ChatListBox_SelectionChanged"
+                         HorizontalContentAlignment="Stretch"
+                         ItemsSource="{Binding Chats}"
+                         ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                          
-                         />
+                         >
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid HorizontalAlignment="Stretch">
+                                <Border BorderThickness="0 0 0 2" BorderBrush="#cccccc" HorizontalAlignment="Stretch">
+                                    <StackPanel>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="auto"></ColumnDefinition>
+                                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                                <ColumnDefinition Width="auto"></ColumnDefinition>
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="auto"></RowDefinition>
+                                                <RowDefinition Height="*"></RowDefinition>
+                                                <RowDefinition Height="*"></RowDefinition>
+
+                                            </Grid.RowDefinitions>
+
+                                            <Border Background="#d1d7e3"
+                                                        CornerRadius="20"
+                                                        Padding="0"
+                                                        Margin="2"
+                                                        Width="30"
+                                                        VerticalAlignment="Center"
+                                                   
+                                                        Height="30"
+                                                        Grid.Row="0" Grid.RowSpan="2">
+                                                    <TextBlock  VerticalAlignment="Center" FontWeight="ExtraBold" FontSize="20" HorizontalAlignment="Center" Text="{Binding ChatNameFirstLetter}"> </TextBlock>
+                                                </Border>
+                                          
+                                            <TextBlock  Grid.Column="1" Grid.Row="0" FontSize="15" FontWeight="Bold" Text="{Binding ChatName}"></TextBlock>
+
+                                            <TextBlock  Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" Text="{Binding LastMessage}"></TextBlock>
+                                            <TextBlock  Grid.Column="2" Grid.Row="2" Margin="5" Text="{Binding LastTime}"></TextBlock>
+
+                                        </Grid>
+                                    </StackPanel>
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+
+                    </ListBox.ItemTemplate>
+                </ListBox>
             </Grid>
         </Border>
 

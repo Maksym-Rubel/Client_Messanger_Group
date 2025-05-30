@@ -1,16 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace AdminWindow
 { 
@@ -137,35 +127,35 @@ namespace AdminWindow
 
     private readonly AppDbContext _context = new();
 
-        public AdminWindow()
+    public AdminWindow()
+    {
+        InitializeComponent();
+        _context.Database.Migrate(); // або EnsureCreated() для SQLite
+        DbInitializer.Seed(_context);
+
+        Users = new ObservableCollection<User>(_context.Users.ToList());
+        UsersListView.ItemsSource = Users;
+    }
+
+    // Видалення з бази
+    private void Delete_Click(object sender, RoutedEventArgs e)
+    {
+        if (UsersListView.SelectedItem is User selectedUser)
         {
-            InitializeComponent();
-            _context.Database.Migrate(); // або EnsureCreated() для SQLite
-            DbInitializer.Seed(_context);
-
-            Users = new ObservableCollection<User>(_context.Users.ToList());
-            UsersListView.ItemsSource = Users;
-        }
-
-        // Видалення з бази
-        private void Delete_Click(object sender, RoutedEventArgs e)
-        {
-            if (UsersListView.SelectedItem is User selectedUser)
-            {
-                _context.Users.Remove(selectedUser);
-                _context.SaveChanges();
-                Users.Remove(selectedUser);
-                MessageBox.Show("Користувача видалено.");
-            }
-        }
-
-        // Блокування
-        private void Block_Click(object sender, RoutedEventArgs e)
-        { 
-            selectedUser.BlockedUntil = DateTime.Now.AddDays(days);
-            selectedUser.Status = "Заблокований";
+            _context.Users.Remove(selectedUser);
             _context.SaveChanges();
-            UsersListView.Items.Refresh();
+            Users.Remove(selectedUser);
+            MessageBox.Show("Користувача видалено.");
         }
     }
+
+    // Блокування
+    private void Block_Click(object sender, RoutedEventArgs e)
+    {
+        selectedUser.BlockedUntil = DateTime.Now.AddDays(days);
+        selectedUser.Status = "Заблокований";
+        _context.SaveChanges();
+        UsersListView.Items.Refresh();
+    }
+}
 }

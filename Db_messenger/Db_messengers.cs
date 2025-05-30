@@ -19,7 +19,7 @@ namespace Db_messenger
             base.OnConfiguring(optionsBuilder);
 
             optionsBuilder.UseSqlServer(
-                @"Server=37.54.60.152,1433;
+                @"Server=46.201.132.38,1433;
                   Database=Group_Messenger_DB;
                   User ID=group_user;
                   Password=NewStrongPasswordHere;

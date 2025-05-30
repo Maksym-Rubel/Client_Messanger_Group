@@ -56,7 +56,7 @@ namespace Client_Messanger
         {
             try
             {
-                await tcpChatClient.ConnectAsync("37.54.60.152", 5000, nickname, emailuser, model);
+                await tcpChatClient.ConnectAsync("46.201.132.38", 5000, nickname, emailuser, model);
                 await tcpChatClient.StartListeningAsync();
             }
             catch (Exception ex)

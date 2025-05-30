@@ -12,8 +12,8 @@ namespace Client_Messanger
         public MainWindow()
         {
             InitializeComponent();
-            MainFrame.Content = new ChoiceLogRegPage();
-            //MainFrame.Content = new chat_view("Maksum", "rubelmaksum2404@gmail.com");
+            //MainFrame.Content = new ChoiceLogRegPage();
+            MainFrame.Content = new chat_view("Maksum", "rubelmaksum2404@gmail.com");
 
         }
 
